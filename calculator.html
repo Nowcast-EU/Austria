@@ -409,10 +409,10 @@ tfoot td {
   <thead>
     <tr>
       <th>Party</th>
-      <th>Feb 2025</th>
+      <th>2024</th>
       <th>Votes (%)</th>
       <th>Seats</th>
-      <th>+/- 2025</th>
+      <th>+/- 2024</th>
     </tr>
   </thead>
   <tbody id="tbody"></tbody>
@@ -439,7 +439,7 @@ tfoot td {
     <div class="tab-switcher">
       <div class="tab-slider" id="tab-slider"></div>
       <button class="tab-button active" onclick="switchTab(0)">Result</button>
-      <button class="tab-button" onclick="switchTab(1)">2025</button>
+      <button class="tab-button" onclick="switchTab(1)">2024</button>
     </div>
   </div>
   <div class="legend" id="legend"></div>
@@ -452,15 +452,15 @@ tfoot td {
 </div>
 
 <script>
-const totalSeats = 630;
-const majority = 316;
+const totalSeats = 183;
+const majority = 92;
 const parties = [
-  {name:'Union', color:'#000000', ge2024: 28.5, votes:24.7, final:0, lastElection: 208},
-  {name:'AfD',   color:'#19CCFF', ge2024: 20.8, votes:26.5, final:0, lastElection: 152},
-  {name:'SPD',   color:'#EB001F', ge2024: 16.4, votes:13.0, final:0, lastElection: 120},
-  {name:'Grüne', color:'#64A12D', ge2024: 11.6, votes:12.0, final:0, lastElection: 85},
-  {name:'FDP',   color:'#FFD700', ge2024: 4.3, votes:3.2, final:0, lastElection: 0},
-  {name:'FW',    color:'#FF9201', ge2024: 1.6, votes:1.5, final:0, lastElection: 0}
+  {name:'FPÖ', color:'#002060', ge2024: 28.9, votes:37.2, final:0, lastElection: 57},
+  {name:'ÖVP',   color:'#00B0F0', ge2024: 26.3, votes:21.0, final:0, lastElection: 51},
+  {name:'SPÖ',   color:'#FF0000', ge2024: 21.1, votes:17.0, final:0, lastElection: 41},
+  {name:'NEOS', color:'#FF3399', ge2024: 9.1, votes:8.2, final:0, lastElection: 18},
+  {name:'Grüne',   color:'#00B050', ge2024: 8.2, votes:10.9, final:0, lastElection: 16},
+  {name:'KPÖ',    color:'#990000', ge2024: 2.4, votes:3.4, final:0, lastElection: 0}
 ];
 
 const calculateBtn = document.getElementById('calculate');
@@ -574,7 +574,7 @@ resetBtn.addEventListener('click', ()=>{
 });
 
 /* ---------------- Coalition Builder Script ---------------- */
-const totalSeatsCoalition = 630;
+const totalSeatsCoalition = 183;
 let selected = [];
 let activeTab = 0;
 
@@ -582,14 +582,12 @@ const datasets = [
   null,
   parties.map(p=>{ 
     const staticGE = [
-      { name: "Union", seats: 208, color: "#000000" },
-      { name: "AfD", seats: 152, color: "#19CCFF" },
-      { name: "SPD", seats: 120, color: "#EB001F" },
-      { name: "Grüne", seats: 85, color: "#64A12D" },
-      { name: "Linke", seats: 64, color: "#F60AD4" },
-      { name: "BSW", seats: 0,  color: "#AB01D4" },
-      { name: "FDP", seats: 0,  color: "#FFD700" },
-      { name: "FW", seats: 0,   color: "#FF9201" }
+      { name: "FPÖ", seats: 57, color: "#002060" },
+      { name: "ÖVP", seats: 51, color: "#00B0F0" },
+      { name: "SPÖ", seats: 41, color: "#FF0000" },
+      { name: "NEOS", seats: 18, color: "#FF3399" },
+      { name: "Grüne", seats: 16, color: "#00B050" },
+      { name: "KPÖ", seats: 0,   color: "#990000" }
     ].find(x=>x.name===p.name);
     return { name: p.name, seats: staticGE ? staticGE.seats : 0, color: staticGE ? staticGE.color : p.color };
   })
