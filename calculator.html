@@ -544,7 +544,7 @@ function calculate(){
       parties[index].final++;
     }
 
-    parties.forEach(p=>{ if(p.votes<5) p.final=0; });
+    parties.forEach(p=>{ if(p.votes<4) p.final=0; });
   }
 
   // Update table (+/–)
