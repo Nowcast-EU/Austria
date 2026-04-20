@@ -2361,7 +2361,7 @@ function randomNormalisedWithRanges(parties, total) {
 }
 
   // --- GB main parties: FPÖ, ÖVP, SPÖ, NEOS, Grüne — guaranteed total of 96 ---
-  const gbParties = ["FPÖ", "ÖVP", "SPÖ", "NEOS", "Grüne", "KPÖ", "FDP", "FW"];
+  const gbParties = ["FPÖ", "ÖVP", "SPÖ", "NEOS", "Grüne", "KPÖ"];
 const gbValues = randomNormalisedWithRanges(gbParties, 98);
   gbParties.forEach((name, j) => {
     const i = parties.findIndex(p => p.name === name);
