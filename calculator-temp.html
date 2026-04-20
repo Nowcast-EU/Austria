@@ -1,0 +1,2759 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+<!-- Primary Meta Tags -->
+<title>🇦🇹 Interactive Seat Calculator | Austria</title>
+<meta name="title" content="🇦🇹 Interactive Seat Calculator | Austria">
+<meta name="description" content="">
+
+<!-- Open Graph / Facebook -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://nowcast-eu.github.io/Austria/calculator.html">
+<meta property="og:title" content="🇦🇹 Interactive Seat Calculator | Austria">
+<meta property="og:description" content="">
+<meta property="og:image" content="https://nowcast-eu.github.io/Austria/thumbnail.png">
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary">
+<meta name="twitter:url" content="https://nowcast-eu.github.io/Austria/calculator.html">
+<meta name="twitter:title" content="🇦🇹 Interactive Seat Calculator | Austria">
+<meta name="twitter:description" content="">
+<meta name="twitter:image" content="https://nowcast-eu.github.io/Austria/thumbnail.png">
+
+<link rel="icon" type="image/png" href="https://nowcast-eu.github.io/Germany/EU_favicon.png">
+
+<style>
+
+@media (min-width: 768px) {
+  html {
+    font-size: 80%;
+  }
+}
+
+  body {
+    font-family: Inter, system-ui, sans-serif;
+    background: #fff;
+    color: #0f172a;
+    margin: 0;
+    padding: 0 64px 24px 64px;
+    scrollbar-gutter: stable;
+    overflow-x: hidden;
+  }
+
+  /* Narrower padding on mobile */
+  @media (max-width: 768px) {
+    body {
+      padding: 0 8px 24px 8px;
+    }
+  }
+
+/* --- Shared title + subtitle styling --- */
+h1, h2.subtitle {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  white-space: nowrap;
+  max-width: 100%;
+}
+
+/* --- Title --- */
+h1 {
+  font-weight: 600;
+  font-size: clamp(1.2rem, 4vw, 2rem);
+  line-height: 1.25;
+  margin-top: 24px;          /* 👈 reduced top margin */
+  margin-bottom: 4px;        /* 👈 minimal gap before subtitle */
+}
+
+/* --- Subtitle --- */
+h2.subtitle {
+  font-weight: 400;
+  color: #555;
+  font-size: clamp(1rem, 3vw, 1.3rem);
+  margin-top: 0;
+  margin-bottom: 16px;       /* 👈 smaller gap before table */
+}
+
+h2.subtitle a {
+  color: #008500;           /* match your calculator accent green */
+  text-decoration: underline; /* underline links */
+  font-style: italic;         /* ensure italic */
+  transition: color 0.2s ease;
+}
+
+h2.subtitle a:hover {
+  color: #005f00;           /* slightly darker green on hover */
+}
+
+/* --- Mobile view: expand width to 90% --- */
+@media (max-width: 768px) {
+  h1, h2.subtitle {
+    max-width: 99%;
+  }
+}
+
+  table { 
+    width: 100%; 
+    border-collapse: collapse; 
+    margin-top: 12px; 
+    table-layout: fixed; 
+  }
+
+  th, td { 
+    padding: 4px 6px; 
+    border: 1px solid #e2e8f0; 
+    text-align: left; 
+    word-wrap: break-word; 
+  }
+
+  th { background: #f1f5f9; font-weight: 600; }
+  td.party-column { font-weight: bold; position: relative; padding-left: 14px; color: black; }
+  td.party-column::before { content: ""; position: absolute; left: 0; top: 0; width: 8px; height: 100%; border-radius: 2px 0 0 2px; background-color: var(--party-color); }
+  td.ge2024-column { font-style: italic; color: #999999; }
+  td.seats-column, td.diff-column { font-weight: bold; text-align: center; }
+  .diff-column.positive { color: #008500; }
+  .diff-column.negative { color: #bb0000; }
+  .diff-column.equal { color: #555555; }
+
+  .input-wrapper { display: flex; align-items: center; justify-content: flex-start; }
+  .input-wrapper input {
+    width: 50px; padding: 4px; border: 1px solid #cbd5e1; border-radius: 4px;
+    text-align: left; margin-right: 4px; transition: border-color 0.3s ease;
+  }
+  .percent-sign { font-size: 14px; }
+
+  /* --- BUTTONS --- */
+  .button-container { 
+    display: flex; 
+    gap: 0; 
+    margin-top: 14px; 
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  button#calculate, button#reset, button#randomise {
+    background: #008500; 
+    color: #fff; 
+    border: none; 
+    border-radius: 6px;
+    padding: 8px 14px; 
+    cursor: pointer; 
+    transition: background 0.3s ease;
+  }
+
+/* Calculate = 50%, Reset = 25%, Randomise = 25% */
+  button#calculate { flex: 2 1 0; border-radius: 6px 0 0 6px; }
+  button#reset { flex: 1 1 0; border-radius: 0; border-left: 3px solid rgba(255,255,255,1); border-right: 3px solid rgba(255,255,255,1); }
+  button#randomise { flex: 1 1 0; border-radius: 0 6px 6px 0; background: #008500; }
+
+  tfoot td { font-weight: bold; text-align: center; background: #f1f5f9; }
+  tfoot td:first-child { text-align: left; padding-left: 14px; }
+
+  input[type=number]::-webkit-inner-spin-button,
+  input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+  input[type=number] { -moz-appearance: textfield; }
+
+  /* Coalition builder */
+  #coalition-builder { margin-top: 48px; }
+  .header-container { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+  h3 { margin: 0; }
+  .legend { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin-bottom: 15px; }
+  .legend-item {
+    display: flex; align-items: center; gap: 8px; cursor: pointer; user-select: none;
+    border: 1px solid #ccc; border-radius: 8px; padding: 6px 10px; background: #f3f3f3;
+    transition: all 0.25s ease; opacity: 0.6; font-weight: normal;
+  }
+  .legend-item:hover { transform: translateY(-1px); }
+  .legend-item.active { opacity: 1; background: #ffffff; border-color: #999; box-shadow: 0 1px 3px rgba(0,0,0,0.15); font-weight: bold; }
+  .legend-box { width: 20px; height: 20px; border-radius: 4px; }
+  .bar-container { position: relative; height: 117px; background: #f0f0f0; border-radius: 10px; overflow: hidden; margin-bottom: 12px; width: 100%; }
+  .coalition-overlay { position: absolute; top: 0; left: 0; height: 100%; width: 0%; border-top-left-radius: 10px; border-bottom-left-radius: 10px; display: flex; overflow: hidden; transition: width 1s ease; }
+  .segment { height: 100%; flex-shrink: 0; border-radius: 0; }
+  .majority-line {
+    position: absolute; top: 0; bottom: 0; width: 2px;
+    background: repeating-linear-gradient(to bottom,#333,#333 5px,transparent 5px,transparent 10px);
+    left: 50%;
+  }
+  .counter { font-size: 22px; font-weight: bold; text-align: center; margin-bottom: 8px; }
+  .note { font-size: 13px; color: #555; text-align: center; }
+
+  /* --- MOBILE VIEW --- */
+  @media (max-width: 768px) {
+    table, th, td { font-size: 13px; }
+    .counter { font-size: 18px; }
+    h3 { font-size: 16px; }
+    .legend-item { font-size: 12px; padding: 5px 8px; }
+    .input-wrapper input { width: 45px; }
+
+    /* 👇 manually control column widths on mobile */
+    table th:nth-child(1), table td:nth-child(1) { width: 20%; } /* Party */
+    table th:nth-child(2), table td:nth-child(2) { width: 15%; } /* 2023 */
+    table th:nth-child(3), table td:nth-child(3) { width: 25%; } /* Votes */
+    table th:nth-child(4), table td:nth-child(4) { width: 20%; } /* Seats */
+    table th:nth-child(5), table td:nth-child(5) { width: 20%; } /* +/- */
+  }
+
+  @media (max-width: 480px) {
+    table, th, td { font-size: 12px; }
+    .input-wrapper input { width: 40px; }
+  }
+/* --- Uniform table header height + centered header text --- */
+th {
+  height: 28px;           /* 👈 match td height for visual consistency */
+  font-weight: 650;
+  text-align: center;     /* 👈 header text centered only */
+  vertical-align: middle; /* 👈 keep it perfectly aligned vertically */
+}
+
+td {
+  height: 23px;           /* 👈 match th height */
+  vertical-align: middle; /* 👈 ensures text sits evenly across rows */
+}
+/* --- Make the Totals row shorter --- */
+tfoot td {
+  height: 14px;             /* roughly 2/3 of 36px */
+  vertical-align: middle;
+}
+
+  /* --- Divider row styling --- */
+.divider-row td {
+  text-align: center;
+  font-weight: 600;
+  background-color: #f9fafb;
+  color: #333;
+  font-size: 13px;
+  height: 8px;
+  border-top: 2px solid #ccc;
+  border-bottom: 2px solid #ccc;
+}
+
+/* --- Responsive rectangular tab switcher --- */
+/* --- Final rectangular tab switcher --- */
+.tab-switcher {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #f4f4f4;
+  border-radius: 12px;
+  padding: 3px;
+  border: 1px solid #d0d0d0;
+  overflow: hidden;
+  width: 140px;             /* base width desktop */
+  max-width: 100%;
+  height: 38px;
+  box-sizing: border-box;
+  -webkit-user-select: none; /* 👈 prevent highlight */
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.tab-btn {
+  position: relative;
+  z-index: 2;
+  flex: 1;
+  min-width: 0;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 14px;
+  color: #111;
+  text-align: center;
+  line-height: 1;
+  white-space: nowrap;
+  transition: color 0.25s ease, font-weight 0.25s ease;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent; /* 👈 remove blue tap flash */
+}
+
+.tab-btn.active {
+  font-weight: 700;
+}
+
+.tab-btn:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.tab-pill {
+  position: absolute;
+  top: 3px;
+  bottom: 3px;
+  left: 3px;
+  right: 50%;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  z-index: 1;
+}
+
+/* --- Mobile scaling + perfect edge alignment --- */
+@media (max-width: 480px) {
+  .tab-switcher {
+    width: 120px;
+    height: 34px;
+    padding: 3px;
+  }
+  .tab-btn {
+    font-size: 13px;
+  }
+  .tab-pill {
+    top: 3px;
+    bottom: 3px;
+    left: 3px;
+    right: 50%;
+  }
+}
+
+  .disclaimer {
+  text-align: center;
+  font-style: italic;
+  color: #999999;
+  font-size: 13px;
+  margin-top: 16px;
+  line-height: 1.4;
+}
+
+/* 👇 Add this block just below the one above */
+@media (min-width: 769px) {
+  .disclaimer {
+    font-size: 15px; /* adjust to preferred size, e.g. 14px–16px */
+  }
+}
+
+/* Desktop: two columns */
+@media (min-width: 769px) {
+  body { padding: 0; }
+  #page-layout { display: flex; flex-direction: row; align-items: flex-start; width: 100%; }
+  #left-column { width: 55%; padding: 0 32px 24px 64px; box-sizing: border-box; }
+  #right-column { width: 45%; padding: 0 64px 24px 32px; box-sizing: border-box;
+    position: sticky; top: 0; max-height: 100vh; overflow-y: auto; }
+}
+
+/* Mobile: single column */
+@media (max-width: 768px) {
+  #page-layout { display: block; }
+  #left-column, #right-column { width: 100%; padding: 0 8px 24px 8px; box-sizing: border-box; }
+  body { padding: 0; }
+}
+
+/* ---- Constituency Results (tweaked layout) ---- */
+#constituency-section {
+  margin-top: 48px;
+  text-align: center;
+}
+  
+#constituency-section > h3 {
+  margin-bottom: 13px; /* adds more space between the title and search box */
+}
+
+.search-container {
+  position: relative;
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto 16px auto;
+}
+
+#constituency-search {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  font-size: 15px;
+  height: 30px;
+  box-sizing: border-box;
+}
+
+.dropdown {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid #ccc;
+  border-top: none;
+  z-index: 10;
+  max-height: 180px;
+  overflow-y: auto;
+  display: none;
+}
+
+.dropdown li {
+  padding: 6px 10px;
+  cursor: pointer;
+  text-align: left;
+}
+
+.dropdown li:hover {
+  background: #f1f5f9;
+}
+
+#constituency-bars {
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.bar-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  height: 22px;
+  gap: 8px;
+}
+
+.bar-party {
+  width: 50px;
+  text-align: right;
+  font-weight: 600;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.bar-wrapper {
+  flex: 1;
+  position: relative;
+  background: #f3f3f3;
+  border-radius: 4px;
+  height: 100%;
+  overflow: hidden;
+}
+
+.bar {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.4s ease;
+}
+
+.bar-value {
+  width: 46px; /* fixed space for numbers */
+  text-align: left;
+  font-size: 14px;
+  font-weight: 600;
+  flex-shrink: 0;
+  color: #333;
+}
+
+.winner-text {
+  margin-top: 10px;
+  color: #333;
+  font-size: 16px;              /* 👈 slightly larger */
+  font-weight: 500;
+  text-align: center;
+  font-family: Inter, system-ui, sans-serif; /* 👈 match header font */
+}
+
+.winner-text span.party {
+  font-weight: 700;             /* bold party names */
+}
+
+.winner-text span.coloured {
+  color: var(--party-color);    /* colour set inline via JS */
+}
+
+/* Floating Converter Button (use for the button element) */
+#help-button {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background-color: #008500;
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+  transition: background 0.3s ease, transform 0.2s ease;
+  z-index: 1000;
+  border: none;           /* remove default button border */
+  padding: 0;             /* keep exact size */
+}
+
+/* ensure focus shows an outline for keyboard users */
+#help-button:focus {
+  outline: 2px solid rgba(255,255,255,0.9);
+  outline-offset: 2px;
+}
+
+/* hover behaviour */
+#help-button:hover {
+  background-color: #006d00;
+  transform: scale(1.05);
+}
+
+/* size the img inside the button */
+#help-button img {
+  width: 25px;
+  height: 25px;
+  display: block;
+  pointer-events: none;   /* clicks hit the button, not the svg */
+}
+
+/* --- Conversion Panel --- */
+
+#help-panel button {
+  background: #008500;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 12px;
+  cursor: pointer;
+  margin-top: 8px;
+  font-weight: 600;
+  transition: background 0.2s ease;
+}
+#help-panel button:hover {
+  background: #006d00;
+}
+
+#conversion-results {
+  margin-top: 10px;
+  text-align: left;
+  font-size: 13px;
+  color: #333;
+}
+
+/* --- Popup Panel --- */
+#help-panel {
+  position: fixed;
+  bottom: 80px;
+  right: 24px;
+  width: 400px;
+  max-width: calc(100vw - 32px); /* 👈 add this line */
+  background: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  padding: 14px 16px;
+  font-size: 14px;
+  line-height: 1.4;
+  font-family: Inter, system-ui, sans-serif;
+  display: none;
+  z-index: 999;
+  text-align: center;
+}
+
+#help-panel h4 {
+  margin-top: 0;
+  font-size: 16px;
+  color: #008500;
+  margin-bottom: 6px;
+}
+
+/* --- GB → UK mini calculator table --- */
+#gbuk-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+  table-layout: fixed; /* ensures all columns equal width */
+}
+
+/* header + cell styles */
+#gbuk-table th,
+#gbuk-table td {
+  border-bottom: 1px solid #eee;
+  padding: 3px 4px;
+  text-align: center;
+  font-size: 13px;
+  width: 33.33%; /* 👈 each column equal width */
+  box-sizing: border-box;
+}
+
+/* narrower popup container */
+#help-panel {
+  width: 250px; /* 👈 thinner default popup */
+}
+
+/* input boxes scale to fit their cells */
+#gbuk-table input {
+  width: 90%; /* 👈 dynamically scales within cell */
+  text-align: center;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 2px;
+  font-size: 13px;
+  box-sizing: border-box;
+}
+
+/* bold result column */
+#gbuk-table td:last-child {
+  font-weight: 600;
+}
+
+/* party column with coloured bar (same style as main table) */
+#gbuk-table .party-column {
+  font-weight: bold;
+  position: relative;
+  padding-left: 12px;
+  text-align: left;
+  color: black;
+}
+#gbuk-table .party-column::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 6px;
+  height: 100%;
+  border-radius: 2px 0 0 2px;
+  background-color: var(--party-color);
+}
+
+/* subtle grey header for consistency */
+#gbuk-table thead th {
+  background: #f1f5f9;
+  font-weight: 600;
+}
+
+  /* --- Concentration editor table layout --- */
+#concentration-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: auto; /* important */
+}
+
+#concentration-table th:nth-child(1),
+#concentration-table td:nth-child(1) {
+  width: 30%; /* Party */
+}
+
+#concentration-table th:nth-child(2),
+#concentration-table td:nth-child(2) {
+  width: 35%; /* Input */
+}
+
+#concentration-table th:nth-child(3),
+#concentration-table td:nth-child(3) {
+  width: 35%; /* Input */
+}
+
+#concentration-table th {
+  background: #f1f5f9;
+  height: 28px;
+  text-align: center;
+  font-weight: 600;
+  font-size: 14px;
+  vertical-align: middle;
+}
+
+#concentration-table td {
+  height: 26px;
+  text-align: center;
+  vertical-align: middle;
+  padding: 4px 6px;
+}
+
+#concentration-table input {
+  width: 45px;
+  height: 24px;
+  text-align: center;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  font-size: 13px;
+  padding: 2px 4px;
+  box-sizing: border-box;
+}
+
+#constituency-map {
+  width: 100%;
+  max-width: 100%;        /* add this */
+  height: 420px;
+  box-sizing: border-box; /* add this */
+  overflow: hidden;       /* add this */
+}
+
+@media (min-width: 1024px) {
+  #constituency-map {
+    height: 600px;
+    max-width: 700px;
+    margin: 0 auto;
+  }
+}
+
+.map-tooltip-clean {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    font-family: Inter, system-ui, sans-serif;
+    font-size: 13px;
+}
+.map-tooltip-clean::before {
+    display: none;
+}
+
+#settings-badge {
+  display: none;
+  position: fixed;
+  bottom: 60px;
+  right: 20px;
+  font-size: 20px;
+  z-index: 1001;
+  pointer-events: none;
+}
+
+@media (max-width: 768px) {
+  #settings-badge {
+    bottom: 60px;
+    right: 12px;
+  }
+}
+
+</style>
+</head>
+
+<body>
+<div id="page-layout">
+<div id="left-column">
+<div style="display:flex; align-items:center; justify-content:center; gap:12px; margin-top:24px; margin-bottom:16px; width:100%;">
+  <img src="https://raw.githubusercontent.com/Nowcast-EU/Germany/refs/heads/main/DE_logo.png"
+       alt="Nowcast UK logo"
+       style="height:clamp(40px, 8vw, 72px); width:auto; flex-shrink:0;">
+  <div style="display:flex; flex-direction:column; justify-content:center; min-width:0; overflow:hidden;">
+    <h1 style="margin:0 0 2px 0; white-space:nowrap; font-size:clamp(0.8rem, 2.5vw, 2rem); text-align:left;">Austria | Interactive Seat Calculator</h1>
+    <h2 class="subtitle" style="margin:0; white-space:nowrap; font-size:clamp(0.65rem, 1.8vw, 1.3rem); text-align:left;">
+      For the latest polling & projections, visit 
+      <a href="https://x.com/Nowcast_EU" target="_blank"><em>Nowcast EU</em></a>
+    </h2>
+  </div>
+</div>
+
+  
+<table>
+  <thead>
+    <tr>
+      <th>Party</th>
+      <th>2024</th>
+      <th>Votes (%)</th>
+      <th>Seats</th>
+      <th>+/- 2024</th>
+    </tr>
+  </thead>
+  <tbody id="tbody"></tbody>
+  <tfoot>
+    <tr>
+      <td>Totals</td>
+      <td></td>
+      <td id="total-votes">0.0%</td>
+      <td id="total-seats">0</td>
+      <td></td>
+    </tr>
+  </tfoot>
+</table>
+
+<div class="button-container">
+  <button id="calculate">Calculate</button>
+  <button id="reset">Reset</button>
+  <button id="randomise">Randomise</button>
+</div>
+
+<div id="coalition-builder">
+<div class="header-container">
+  <h3>Coalition Builder (User Generated)</h3>
+
+  <div class="tab-switcher">
+    <div class="tab-pill" id="tab-pill"></div>
+    <button class="tab-btn active" id="tab-result">Result</button>
+    <button class="tab-btn" id="tab-2023">2025</button>
+  </div>
+</div>
+
+  <div class="legend" id="legend"></div>
+  <div class="bar-container" id="bar">
+    <div class="coalition-overlay" id="coalition-overlay"></div>
+    <div class="majority-line" title="Majority (326 seats)"></div>
+  </div>
+  <div class="counter" id="counter">0 / 650</div>
+  <div class="note">Majority = 326 seats</div>
+</div>
+
+</div><!-- end left-column -->
+<div id="right-column">
+  <!-- Constituency-level results -->
+<div id="constituency-section">
+  <h3>Constituency Vote Results (User Generated)</h3>
+  <div class="search-container">
+    <input type="text" id="constituency-search" placeholder="Search for a constituency...">
+    <ul id="constituency-dropdown" class="dropdown"></ul>
+  </div>
+  <div id="constituency-bars"></div>
+  <p id="winner-text" class="winner-text"></p>
+</div>
+
+  <!-- Constituency Map -->
+<div id="map-section" style="margin-top:48px;">
+  <div id="constituency-map" style="border-radius:10px; overflow:hidden; border:1px solid #e2e8f0;"></div>
+<div style="display:flex; align-items:center; justify-content:space-between; margin-top:6px;">
+    <p style="font-size:12px; color:#888; margin:0;">Click a constituency to see its results above.</p>
+    <button onclick="document.getElementById('randomise').click()" style="background:#008500; color:#fff; border:none; border-radius:6px; padding:5px 12px; font-size:12px; cursor:pointer;">Randomise</button>
+  </div>
+
+<p class="disclaimer">
+  ** This calculator is a simplified version of the Nowcast EU model. Certain features that can't be included such as vote concentration, incumbent effects, and demographic weighting mean some projections may differ from our regular tracker.
+</p>
+</div><!-- end right-column -->
+</div><!-- end page-layout -->
+
+<!-- Floating Converter Button -->
+<button id="help-button" aria-label="Settings" title="Settings" type="button">
+  <img id="help-icon" src="https://raw.githubusercontent.com/Nowcast-EU/United-Kingdom/refs/heads/main/cog.svg" alt="" />
+</button>
+
+<span id="settings-badge">❗</span>
+
+<!-- Vote Concentration Editor -->
+<div id="help-panel">
+  <h4>Additional Settings (%)</h4>
+
+  <table id="concentration-table">
+    <thead>
+      <tr>
+        <th>Party</th>
+        <th>Concentration</th>
+        <th>Incumbents</th>
+      </tr>
+    </thead>
+    <tbody id="concentration-body"></tbody>
+  </table>
+</div>
+
+<script>
+const BASELINE = {"baseline_national": {"FPÖ": 0.286, "ÖVP": 0.208, "SPÖ": 0.164, "NEOS": 0.116, "Grüne": 0.088, "KPÖ": 0.0497, "FDP": 0.043, "FW": 0.015, "OTH": 0.03},
+    
+ "constituencies": [ {"name": "Flensburg – Schleswig", "FPÖ": 0.254281, "ÖVP": 0.1439326, "SPÖ": 0.1420135, "NEOS": 0.2168585, "Grüne": 0.0518157, "KPÖ": 0.0301313, "FDP": 0.035338, "FW": 0.0056855, "OTH": 0.1199439},
+{"name": "Nordfriesland – Dithmarschen Nord", "FPÖ": 0.3138296, "ÖVP": 0.1535558, "SPÖ": 0.1957836, "NEOS": 0.1046099, "Grüne": 0.0499056, "KPÖ": 0.0306738, "FDP": 0.047812, "FW": 0.0068975, "OTH": 0.0969321},
+{"name": "Steinburg – Dithmarschen Süd", "FPÖ": 0.3374126, "ÖVP": 0.1966633, "SPÖ": 0.2034116, "NEOS": 0.0954396, "Grüne": 0.0578422, "KPÖ": 0.0353292, "FDP": 0.0492308, "FW": 0.0102103, "OTH": 0.0144605},
+{"name": "Rendsburg-Eckernförde", "FPÖ": 0.3188087, "ÖVP": 0.1496846, "SPÖ": 0.2060593, "NEOS": 0.1156654, "Grüne": 0.0495709, "KPÖ": 0.0308113, "FDP": 0.0450523, "FW": 0.0056174, "OTH": 0.0787302},
+{"name": "Kiel", "FPÖ": 0.201615, "ÖVP": 0.1027276, "SPÖ": 0.2121758, "NEOS": 0.2496186, "Grüne": 0.0921669, "KPÖ": 0.0313415, "FDP": 0.0379101, "FW": 0.0033194, "OTH": 0.0691251},
+{"name": "Plön – Neumünster", "FPÖ": 0.3167239, "ÖVP": 0.1724063, "SPÖ": 0.2324579, "NEOS": 0.1288204, "Grüne": 0.052303, "KPÖ": 0.0340961, "FDP": 0.0417562, "FW": 0.007876, "OTH": 0.01356},
+{"name": "Pinneberg", "FPÖ": 0.3043694, "ÖVP": 0.1464419, "SPÖ": 0.2392841, "NEOS": 0.1225135, "Grüne": 0.0612567, "KPÖ": 0.034063, "FDP": 0.0484381, "FW": 0.0063051, "OTH": 0.0373283},
+{"name": "Segeberg – Stormarn-Mitte", "FPÖ": 0.3114505, "ÖVP": 0.1658498, "SPÖ": 0.2362395, "NEOS": 0.1137807, "Grüne": 0.0578546, "KPÖ": 0.0354572, "FDP": 0.0502667, "FW": 0.0078877, "OTH": 0.0212133},
+{"name": "Ostholstein – Stormarn-Nord", "FPÖ": 0.3356161, "ÖVP": 0.1668436, "SPÖ": 0.2449612, "NEOS": 0.1002991, "Grüne": 0.0530428, "KPÖ": 0.0297268, "FDP": 0.0492253, "FW": 0.0087122, "OTH": 0.011573},
+{"name": "Herzogtum Lauenburg – Stormarn-Süd", "FPÖ": 0.3132123, "ÖVP": 0.1637899, "SPÖ": 0.2241336, "NEOS": 0.134097, "Grüne": 0.0565123, "KPÖ": 0.0353208, "FDP": 0.0513157, "FW": 0.0082087, "OTH": 0.0134097},
+{"name": "Lübeck", "FPÖ": 0.2283474, "ÖVP": 0.1487136, "SPÖ": 0.2696034, "NEOS": 0.1861319, "Grüne": 0.0690799, "KPÖ": 0.0356711, "FDP": 0.0374343, "FW": 0.0067891, "OTH": 0.0182294},
+{"name": "Schwerin – Ludwigslust-Parchim I – Nordwestmecklenburg I", "FPÖ": 0.1914439, "ÖVP": 0.3288438, "SPÖ": 0.1841159, "NEOS": 0.030228, "Grüne": 0.1163319, "KPÖ": 0.0945015, "FDP": 0.0301689, "FW": 0.010626, "OTH": 0.01374},
+{"name": "Ludwigslust-Parchim II – Nordwestmecklenburg II – Landkreis Rostock I", "FPÖ": 0.1883289, "ÖVP": 0.3406538, "SPÖ": 0.1984839, "NEOS": 0.0332345, "Grüne": 0.1033963, "KPÖ": 0.0970798, "FDP": 0.0280909, "FW": 0.0107317, "OTH": 0},
+{"name": "Rostock – Landkreis Rostock II", "FPÖ": 0.1774826, "ÖVP": 0.2451822, "SPÖ": 0.1546111, "NEOS": 0.0484875, "Grüne": 0.2342039, "KPÖ": 0.0902081, "FDP": 0.0311274, "FW": 0.0077189, "OTH": 0.0109783},
+{"name": "Vorpommern-Rügen – Vorpommern-Greifswald I", "FPÖ": 0.1939517, "ÖVP": 0.3412451, "SPÖ": 0.1335705, "NEOS": 0.0448284, "Grüne": 0.1216772, "KPÖ": 0.0924221, "FDP": 0.030671, "FW": 0.0105285, "OTH": 0.0311055},
+{"name": "Mecklenburgische Seenplatte I – Vorpommern-Greifswald II", "FPÖ": 0.1823823, "ÖVP": 0.4142552, "SPÖ": 0.1264761, "NEOS": 0.0210794, "Grüne": 0.0989813, "KPÖ": 0.1040034, "FDP": 0.0288468, "FW": 0.0093116, "OTH": 0.0146639},
+{"name": "Mecklenburgische Seenplatte II – Landkreis Rostock III", "FPÖ": 0.1763082, "ÖVP": 0.3735189, "SPÖ": 0.1781258, "NEOS": 0.0190849, "Grüne": 0.0972421, "KPÖ": 0.1008845, "FDP": 0.0264432, "FW": 0.0093074, "OTH": 0.0190849},
+{"name": "Hamburg-Mitte", "FPÖ": 0.1624067, "ÖVP": 0.1012654, "SPÖ": 0.2617615, "NEOS": 0.2053968, "Grüne": 0.1576301, "KPÖ": 0.0430853, "FDP": 0.0393381, "FW": 0.0033221, "OTH": 0.025794},
+{"name": "Hamburg-Altona", "FPÖ": 0.2034602, "ÖVP": 0.0729386, "SPÖ": 0.224574, "NEOS": 0.2639224, "Grüne": 0.1535548, "KPÖ": 0.031694, "FDP": 0.0447807, "FW": 0.0021963, "OTH": 0.0028792},
+{"name": "Hamburg-Eimsbüttel", "FPÖ": 0.2020246, "ÖVP": 0.0744301, "SPÖ": 0.2513224, "NEOS": 0.2687217, "Grüne": 0.1217947, "KPÖ": 0.031467, "FDP": 0.0474519, "FW": 0.0027875, "OTH": 0},
+{"name": "Hamburg-Nord", "FPÖ": 0.2682276, "ÖVP": 0.0773183, "SPÖ": 0.2539094, "NEOS": 0.2166821, "Grüne": 0.0754092, "KPÖ": 0.0286161, "FDP": 0.0558714, "FW": 0.0029658, "OTH": 0.021},
+{"name": "Hamburg-Wandsbek", "FPÖ": 0.2358149, "ÖVP": 0.1384339, "SPÖ": 0.3083733, "NEOS": 0.1241131, "Grüne": 0.1011999, "KPÖ": 0.0450778, "FDP": 0.0391617, "FW": 0.0049612, "OTH": 0.0028641},
+{"name": "Hamburg-Bergedorf – Harburg", "FPÖ": 0.2031238, "ÖVP": 0.1670551, "SPÖ": 0.3056348, "NEOS": 0.1101045, "Grüne": 0.1091553, "KPÖ": 0.0489031, "FDP": 0.0311922, "FW": 0.0048985, "OTH": 0.0199327},
+{"name": "Aurich – Emden", "FPÖ": 0.208551, "ÖVP": 0.1906213, "SPÖ": 0.388792, "NEOS": 0.0471835, "Grüne": 0.0547328, "KPÖ": 0.0391795, "FDP": 0.0308206, "FW": 0.0080346, "OTH": 0.0320848},
+{"name": "Unterems", "FPÖ": 0.3888463, "ÖVP": 0.1949032, "SPÖ": 0.2160257, "NEOS": 0.067208, "Grüne": 0.0528063, "KPÖ": 0.0356667, "FDP": 0.0375676, "FW": 0.0069761, "OTH": 0},
+{"name": "Friesland – Wilhelmshaven – Wittmund", "FPÖ": 0.2562963, "ÖVP": 0.1883969, "SPÖ": 0.3385406, "NEOS": 0.0554671, "Grüne": 0.0525981, "KPÖ": 0.0388958, "FDP": 0.0380317, "FW": 0.0078653, "OTH": 0.0239082},
+{"name": "Oldenburg – Ammerland", "FPÖ": 0.2296398, "ÖVP": 0.1243882, "SPÖ": 0.3291503, "NEOS": 0.142568, "Grüne": 0.0775034, "KPÖ": 0.0363022, "FDP": 0.0423719, "FW": 0.0046805, "OTH": 0.0133957},
+{"name": "Delmenhorst – Wesermarsch – Oldenburg-Land", "FPÖ": 0.2861385, "ÖVP": 0.1875038, "SPÖ": 0.2587942, "NEOS": 0.095705, "Grüne": 0.0673842, "KPÖ": 0.0404464, "FDP": 0.0479989, "FW": 0.0101695, "OTH": 0.0058595},
+{"name": "Cuxhaven – Stade II", "FPÖ": 0.3154337, "ÖVP": 0.1909965, "SPÖ": 0.2942118, "NEOS": 0.0694533, "Grüne": 0.0501607, "KPÖ": 0.0356578, "FDP": 0.0363886, "FW": 0.0076976, "OTH": 0},
+{"name": "Stade I – Rotenburg II", "FPÖ": 0.3450865, "ÖVP": 0.1711173, "SPÖ": 0.2433668, "NEOS": 0.0931638, "Grüne": 0.0589404, "KPÖ": 0.0313749, "FDP": 0.0382436, "FW": 0.0063482, "OTH": 0.0123585},
+{"name": "Mittelems", "FPÖ": 0.4246355, "ÖVP": 0.1366977, "SPÖ": 0.2375244, "NEOS": 0.0707726, "Grüne": 0.0494439, "KPÖ": 0.0282665, "FDP": 0.0435466, "FW": 0.0062042, "OTH": 0.0029085},
+{"name": "Cloppenburg – Vechta", "FPÖ": 0.4409257, "ÖVP": 0.1983203, "SPÖ": 0.168476, "NEOS": 0.0587259, "Grüne": 0.0490987, "KPÖ": 0.03204, "FDP": 0.043602, "FW": 0.0088114, "OTH": 0},
+{"name": "Diepholz – Nienburg I", "FPÖ": 0.3422443, "ÖVP": 0.1643546, "SPÖ": 0.2658677, "NEOS": 0.0783101, "Grüne": 0.0580075, "KPÖ": 0.0353559, "FDP": 0.0441929, "FW": 0.0116669, "OTH": 0},
+{"name": "Osterholz – Verden", "FPÖ": 0.3396225, "ÖVP": 0.160824, "SPÖ": 0.2346138, "NEOS": 0.1059546, "Grüne": 0.0633836, "KPÖ": 0.0372006, "FDP": 0.0397065, "FW": 0.0054501, "OTH": 0.0132443},
+{"name": "Rotenburg I – Heidekreis", "FPÖ": 0.26331, "ÖVP": 0.1861496, "SPÖ": 0.4060568, "NEOS": 0.0520833, "Grüne": 0, "KPÖ": 0.0330266, "FDP": 0.035616, "FW": 0.0092902, "OTH": 0.0144676},
+{"name": "Harburg", "FPÖ": 0.319146, "ÖVP": 0.159573, "SPÖ": 0.2528175, "NEOS": 0.101896, "Grüne": 0.0567157, "KPÖ": 0.0341302, "FDP": 0.0467225, "FW": 0.0088121, "OTH": 0.0201869},
+{"name": "Lüchow-Dannenberg – Lüneburg", "FPÖ": 0.2535841, "ÖVP": 0.1494507, "SPÖ": 0.2680471, "NEOS": 0.1581285, "Grüne": 0.0684581, "KPÖ": 0.037096, "FDP": 0.0351837, "FW": 0.0117321, "OTH": 0.0183198},
+{"name": "Osnabrück-Land", "FPÖ": 0.3513472, "ÖVP": 0.1727937, "SPÖ": 0.2323115, "NEOS": 0.0969565, "Grüne": 0.054718, "KPÖ": 0.0352702, "FDP": 0.0413535, "FW": 0.0085295, "OTH": 0.0067198},
+{"name": "Stadt Osnabrück", "FPÖ": 0.2845564, "ÖVP": 0.1092237, "SPÖ": 0.2701849, "NEOS": 0.13126, "Grüne": 0.1130561, "KPÖ": 0.0326968, "FDP": 0.039606, "FW": 0.0050446, "OTH": 0.0143715},
+{"name": "Nienburg II – Schaumburg", "FPÖ": 0.2753964, "ÖVP": 0.1935478, "SPÖ": 0.305247, "NEOS": 0.0722193, "Grüne": 0.0529608, "KPÖ": 0.0351634, "FDP": 0.0364787, "FW": 0.0097281, "OTH": 0.0192585},
+{"name": "Stadt Hannover I", "FPÖ": 0.2176725, "ÖVP": 0.1239787, "SPÖ": 0.3227231, "NEOS": 0.1485851, "Grüne": 0.0804442, "KPÖ": 0.0423456, "FDP": 0.040894, "FW": 0.0034823, "OTH": 0.0198744},
+{"name": "Stadt Hannover II", "FPÖ": 0.1693977, "ÖVP": 0.0970706, "SPÖ": 0.3445055, "NEOS": 0.1817695, "Grüne": 0.107539, "KPÖ": 0.0368014, "FDP": 0.0368953, "FW": 0.0031808, "OTH": 0.0228401},
+{"name": "Hannover-Land I", "FPÖ": 0.3307585, "ÖVP": 0.1653793, "SPÖ": 0.2604248, "NEOS": 0.0902933, "Grüne": 0.0522751, "KPÖ": 0.0368757, "FDP": 0.0433902, "FW": 0.0063463, "OTH": 0.0142568},
+{"name": "Celle – Uelzen", "FPÖ": 0.340093, "ÖVP": 0.1942009, "SPÖ": 0.2231861, "NEOS": 0.0898541, "Grüne": 0.0570042, "KPÖ": 0.0349321, "FDP": 0.0416762, "FW": 0.0093916, "OTH": 0.0096617},
+{"name": "Gifhorn – Peine", "FPÖ": 0.2677717, "ÖVP": 0.2044278, "SPÖ": 0.325357, "NEOS": 0.0614243, "Grüne": 0.0479878, "KPÖ": 0.0365052, "FDP": 0.0357235, "FW": 0.0073661, "OTH": 0.0134366},
+{"name": "Hameln-Pyrmont – Holzminden", "FPÖ": 0.2762871, "ÖVP": 0.2019021, "SPÖ": 0.3187928, "NEOS": 0.0695548, "Grüne": 0.0521661, "KPÖ": 0.0362123, "FDP": 0.0380031, "FW": 0.0070817, "OTH": 0},
+{"name": "Hannover-Land II", "FPÖ": 0.2862234, "ÖVP": 0.1641014, "SPÖ": 0.3033968, "NEOS": 0.0849129, "Grüne": 0.0524743, "KPÖ": 0.0364761, "FDP": 0.0380391, "FW": 0.0067077, "OTH": 0.0276683},
+{"name": "Hildesheim", "FPÖ": 0.2811629, "ÖVP": 0.1746473, "SPÖ": 0.2945973, "NEOS": 0.0902024, "Grüne": 0.0662124, "KPÖ": 0.0357806, "FDP": 0.0356734, "FW": 0.0054105, "OTH": 0.0163132},
+{"name": "Salzgitter – Wolfenbüttel", "FPÖ": 0.2713861, "ÖVP": 0.2042588, "SPÖ": 0.2934422, "NEOS": 0.0661683, "Grüne": 0.0671273, "KPÖ": 0.0385899, "FDP": 0.0339686, "FW": 0.0068385, "OTH": 0.0182203},
+{"name": "Braunschweig", "FPÖ": 0.2367247, "ÖVP": 0.1274671, "SPÖ": 0.3201055, "NEOS": 0.1370511, "Grüne": 0.0785888, "KPÖ": 0.0368435, "FDP": 0.0381388, "FW": 0.0049541, "OTH": 0.0201264},
+{"name": "Helmstedt – Wolfsburg", "FPÖ": 0.2929322, "ÖVP": 0.2114041, "SPÖ": 0.2701802, "NEOS": 0.064464, "Grüne": 0.058776, "KPÖ": 0.0424623, "FDP": 0.0358682, "FW": 0.004953, "OTH": 0.01896},
+{"name": "Goslar – Northeim – Göttingen II", "FPÖ": 0.2902303, "ÖVP": 0.1896555, "SPÖ": 0.2911882, "NEOS": 0.0737549, "Grüne": 0.0574714, "KPÖ": 0.0372371, "FDP": 0.0378888, "FW": 0.0072482, "OTH": 0.0153257},
+{"name": "Göttingen I", "FPÖ": 0.2815121, "ÖVP": 0.1373702, "SPÖ": 0.2476532, "NEOS": 0.1489789, "Grüne": 0.088033, "KPÖ": 0.0364254, "FDP": 0.0382837, "FW": 0.0062652, "OTH": 0.0154783},
+{"name": "Bremen I", "FPÖ": 0.2278165, "ÖVP": 0.1120098, "SPÖ": 0.2392074, "NEOS": 0.1794055, "Grüne": 0.1271976, "KPÖ": 0.0390651, "FDP": 0.0363468, "FW": 0.0028803, "OTH": 0.036071},
+{"name": "Bremen II – Bremerhaven", "FPÖ": 0.2005636, "ÖVP": 0.1852826, "SPÖ": 0.2893847, "NEOS": 0.1041021, "Grüne": 0.1155628, "KPÖ": 0.043764, "FDP": 0.0301404, "FW": 0.0063681, "OTH": 0.0248317},
+{"name": "Prignitz – Ostprignitz-Ruppin – Havelland I", "FPÖ": 0.1799698, "ÖVP": 0.3571849, "SPÖ": 0.2038433, "NEOS": 0.0284646, "Grüne": 0.0964124, "KPÖ": 0.0974897, "FDP": 0.0233254, "FW": 0.01331, "OTH": 0},
+{"name": "Uckermark – Barnim I", "FPÖ": 0.1655036, "ÖVP": 0.3463819, "SPÖ": 0.1754519, "NEOS": 0.0352713, "Grüne": 0.1103358, "KPÖ": 0.1117196, "FDP": 0.0240056, "FW": 0.0141469, "OTH": 0.0171834},
+{"name": "Oberhavel – Havelland II", "FPÖ": 0.2306078, "ÖVP": 0.2864, "SPÖ": 0.185974, "NEOS": 0.0613714, "Grüne": 0.0883377, "KPÖ": 0.0810452, "FDP": 0.0335846, "FW": 0.013152, "OTH": 0.0195273},
+{"name": "Märkisch-Oderland – Barnim II", "FPÖ": 0.1632084, "ÖVP": 0.3255152, "SPÖ": 0.1686187, "NEOS": 0.0360682, "Grüne": 0.1199266, "KPÖ": 0.1106525, "FDP": 0.0260928, "FW": 0.0156529, "OTH": 0.0342648},
+{"name": "Brandenburg an der Havel – Potsdam-Mittelmark I – Havelland III – Teltow-Fläming I", "FPÖ": 0.1778753, "ÖVP": 0.3080726, "SPÖ": 0.2365557, "NEOS": 0.0339247, "Grüne": 0.0999402, "KPÖ": 0.0928016, "FDP": 0.0265305, "FW": 0.0132968, "OTH": 0.0110026},
+{"name": "Potsdam – Potsdam-Mittelmark II – Teltow-Fläming II", "FPÖ": 0.1913675, "ÖVP": 0.176504, "SPÖ": 0.2025151, "NEOS": 0.147706, "Grüne": 0.1281977, "KPÖ": 0.0772042, "FDP": 0.0400185, "FW": 0.0086179, "OTH": 0.0278691},
+{"name": "Dahme-Spreewald – Teltow-Fläming III", "FPÖ": 0.2167217, "ÖVP": 0.3059601, "SPÖ": 0.1602648, "NEOS": 0.047351, "Grüne": 0.1028973, "KPÖ": 0.092801, "FDP": 0.0318377, "FW": 0.0130274, "OTH": 0.0291391},
+{"name": "Frankfurt (Oder) – Oder-Spree", "FPÖ": 0.1696087, "ÖVP": 0.3446305, "SPÖ": 0.1876522, "NEOS": 0.0270652, "Grüne": 0.1019457, "KPÖ": 0.1132134, "FDP": 0.0283793, "FW": 0.0130701, "OTH": 0.0144348},
+{"name": "Cottbus – Spree-Neiße", "FPÖ": 0.1559495, "ÖVP": 0.3786058, "SPÖ": 0.2100361, "NEOS": 0, "Grüne": 0.0883414, "KPÖ": 0.1034028, "FDP": 0.0291481, "FW": 0.0110789, "OTH": 0.0234375},
+{"name": "Elbe-Elster – Oberspreewald-Lausitz", "FPÖ": 0.1683143, "ÖVP": 0.3954925, "SPÖ": 0.1526785, "NEOS": 0.018395, "Grüne": 0.11037, "KPÖ": 0.1074137, "FDP": 0.0283395, "FW": 0.0189964, "OTH": 0},
+{"name": "Altmark – Jerichower Land", "FPÖ": 0.2021906, "ÖVP": 0.3602668, "SPÖ": 0.1470477, "NEOS": 0.0257333, "Grüne": 0.1158001, "KPÖ": 0.1063566, "FDP": 0.0278517, "FW": 0.0147532, "OTH": 0},
+{"name": "Börde – Salzlandkreis", "FPÖ": 0.2037071, "ÖVP": 0.3928636, "SPÖ": 0.1236793, "NEOS": 0.0200069, "Grüne": 0.0963971, "KPÖ": 0.1021757, "FDP": 0.0265994, "FW": 0.0118357, "OTH": 0.0227352},
+{"name": "Harz", "FPÖ": 0.2119698, "ÖVP": 0.3517796, "SPÖ": 0.1262799, "NEOS": 0.029766, "Grüne": 0.1073379, "KPÖ": 0.1055802, "FDP": 0.0246597, "FW": 0.0128611, "OTH": 0.029766},
+{"name": "Magdeburg", "FPÖ": 0.209536, "ÖVP": 0.2920805, "SPÖ": 0.1560181, "NEOS": 0.0544249, "Grüne": 0.1351553, "KPÖ": 0.1014915, "FDP": 0.0273915, "FW": 0.0093888, "OTH": 0.0145133},
+{"name": "Anhalt – Dessau – Wittenberg", "FPÖ": 0.2702107, "ÖVP": 0.3535638, "SPÖ": 0.0961767, "NEOS": 0.0439665, "Grüne": 0.0934288, "KPÖ": 0.0987816, "FDP": 0.0267586, "FW": 0.0171134, "OTH": 0},
+{"name": "Halle", "FPÖ": 0.2025452, "ÖVP": 0.277932, "SPÖ": 0.1634894, "NEOS": 0.0499551, "Grüne": 0.1471404, "KPÖ": 0.0921343, "FDP": 0.0319439, "FW": 0.0085198, "OTH": 0.02634},
+{"name": "Burgenland – Saalekreis", "FPÖ": 0.2215129, "ÖVP": 0.4064122, "SPÖ": 0.0924496, "NEOS": 0.0219682, "Grüne": 0.0997724, "KPÖ": 0.1056481, "FDP": 0.0300472, "FW": 0.0139513, "OTH": 0.0082381},
+{"name": "Mansfeld", "FPÖ": 0.1940926, "ÖVP": 0.4010026, "SPÖ": 0.0979618, "NEOS": 0.0183106, "Grüne": 0.1126103, "KPÖ": 0.1057422, "FDP": 0.0296257, "FW": 0.0122728, "OTH": 0.0283815},
+{"name": "Berlin-Mitte", "FPÖ": 0.1398765, "ÖVP": 0.0831434, "SPÖ": 0.1633523, "NEOS": 0.2474738, "Grüne": 0.2347578, "KPÖ": 0.0592702, "FDP": 0.0390203, "FW": 0.0018046, "OTH": 0.031301},
+{"name": "Berlin-Pankow", "FPÖ": 0.1508433, "ÖVP": 0.1573612, "SPÖ": 0.1238405, "NEOS": 0.2402319, "Grüne": 0.2132291, "KPÖ": 0.0707976, "FDP": 0.0308043, "FW": 0.0035809, "OTH": 0.0093113},
+{"name": "Berlin-Reinickendorf", "FPÖ": 0.2900272, "ÖVP": 0.1689479, "SPÖ": 0.2055532, "NEOS": 0.1210793, "Grüne": 0.1107547, "KPÖ": 0.0497592, "FDP": 0.0422218, "FW": 0.0032093, "OTH": 0.0084474},
+{"name": "Berlin-Spandau – Charlottenburg Nord", "FPÖ": 0.2441241, "ÖVP": 0.1842623, "SPÖ": 0.2572189, "NEOS": 0.0869868, "Grüne": 0.1066289, "KPÖ": 0.0557743, "FDP": 0.036856, "FW": 0.0028944, "OTH": 0.0252542},
+{"name": "Berlin-Steglitz-Zehlendorf", "FPÖ": 0.292413, "ÖVP": 0.098106, "SPÖ": 0.2133567, "NEOS": 0.2104993, "Grüne": 0.0838187, "KPÖ": 0.0370426, "FDP": 0.0565503, "FW": 0.0034509, "OTH": 0.0047624},
+{"name": "Berlin-Charlottenburg-Wilmersdorf", "FPÖ": 0.2470171, "ÖVP": 0.0807736, "SPÖ": 0.2225971, "NEOS": 0.2254148, "Grüne": 0.1042544, "KPÖ": 0.0405029, "FDP": 0.0600832, "FW": 0.0015115, "OTH": 0.0178453},
+{"name": "Berlin-Tempelhof-Schöneberg", "FPÖ": 0.2311995, "ÖVP": 0.1043217, "SPÖ": 0.1926662, "NEOS": 0.2321393, "Grüne": 0.1137201, "KPÖ": 0.0479974, "FDP": 0.0361644, "FW": 0.0023182, "OTH": 0.0394731},
+{"name": "Berlin-Neukölln", "FPÖ": 0.1856962, "ÖVP": 0.1225406, "SPÖ": 0.1772126, "NEOS": 0.1046309, "Grüne": 0.2827861, "KPÖ": 0.0529408, "FDP": 0.0261873, "FW": 0.0027596, "OTH": 0.0452458},
+{"name": "Berlin-Friedrichshain-Kreuzberg – Prenzlauer Berg Ost", "FPÖ": 0.0939631, "ÖVP": 0.0723516, "SPÖ": 0.1230917, "NEOS": 0.2875272, "Grüne": 0.326052, "KPÖ": 0.0552945, "FDP": 0.0261336, "FW": 0.0014919, "OTH": 0.0140945},
+{"name": "Berlin-Treptow-Köpenick", "FPÖ": 0.1347831, "ÖVP": 0.1959613, "SPÖ": 0.0822081, "NEOS": 0.0458836, "Grüne": 0.3995698, "KPÖ": 0.0872694, "FDP": 0.0280288, "FW": 0.00431, "OTH": 0.0219859},
+{"name": "Berlin-Marzahn-Hellersdorf", "FPÖ": 0.2833386, "ÖVP": 0.2862496, "SPÖ": 0.0844194, "NEOS": 0.0397838, "Grüne": 0.1630167, "KPÖ": 0.1057056, "FDP": 0.0248789, "FW": 0.0067852, "OTH": 0.005822},
+{"name": "Berlin-Lichtenberg", "FPÖ": 0.1699276, "ÖVP": 0.211444, "SPÖ": 0.0868948, "NEOS": 0.0511714, "Grüne": 0.3282692, "KPÖ": 0.0972825, "FDP": 0.0242543, "FW": 0.0037223, "OTH": 0.0270339},
+{"name": "Aachen I", "FPÖ": 0.3166378, "ÖVP": 0, "SPÖ": 0.1931197, "NEOS": 0.2735045, "Grüne": 0.0911682, "KPÖ": 0.0345393, "FDP": 0.0470947, "FW": 0.002763, "OTH": 0.0411727},
+{"name": "Aachen II", "FPÖ": 0.4135415, "ÖVP": 0, "SPÖ": 0.3145391, "NEOS": 0.0773457, "Grüne": 0.078377, "KPÖ": 0.0418609, "FDP": 0.0433001, "FW": 0.0073164, "OTH": 0.0237193},
+{"name": "Heinsberg", "FPÖ": 0.3985427, "ÖVP": 0.1901481, "SPÖ": 0.184386, "NEOS": 0.0729861, "Grüne": 0.0556999, "KPÖ": 0.0372527, "FDP": 0.0401046, "FW": 0.007435, "OTH": 0.0134448},
+{"name": "Düren", "FPÖ": 0.3816982, "ÖVP": 0.1941973, "SPÖ": 0.2104602, "NEOS": 0.0717478, "Grüne": 0.0535717, "KPÖ": 0.0404107, "FDP": 0.0410124, "FW": 0.0069017, "OTH": 0},
+{"name": "Rhein-Erft-Kreis I", "FPÖ": 0.3340576, "ÖVP": 0.1593932, "SPÖ": 0.2491115, "NEOS": 0.0973539, "Grüne": 0.0610848, "KPÖ": 0.0405656, "FDP": 0.0476514, "FW": 0.0050552, "OTH": 0.0057267},
+{"name": "Euskirchen – Rhein-Erft-Kreis II", "FPÖ": 0.3693761, "ÖVP": 0.1769927, "SPÖ": 0.1991168, "NEOS": 0.0913821, "Grüne": 0.0538674, "KPÖ": 0.0381416, "FDP": 0.0461676, "FW": 0.0066793, "OTH": 0.0182764},
+{"name": "Köln I", "FPÖ": 0.2338834, "ÖVP": 0.1254984, "SPÖ": 0.2367356, "NEOS": 0.1910998, "Grüne": 0.1055327, "KPÖ": 0.0445993, "FDP": 0.0400136, "FW": 0.0036223, "OTH": 0.0190149},
+{"name": "Köln II", "FPÖ": 0.2680043, "ÖVP": 0.0572251, "SPÖ": 0.157369, "NEOS": 0.3252294, "Grüne": 0.0820227, "KPÖ": 0.0267189, "FDP": 0.0576609, "FW": 0.001926, "OTH": 0.0238438},
+{"name": "Köln III", "FPÖ": 0.1860964, "ÖVP": 0.1112741, "SPÖ": 0.247489, "NEOS": 0.2494075, "Grüne": 0.1074371, "KPÖ": 0.0408035, "FDP": 0.0325633, "FW": 0.002866, "OTH": 0.022063},
+{"name": "Bonn", "FPÖ": 0.3139282, "ÖVP": 0.0773036, "SPÖ": 0.2036291, "NEOS": 0.2300255, "Grüne": 0.07259, "KPÖ": 0.0336705, "FDP": 0.0488917, "FW": 0.0020496, "OTH": 0.0179118},
+{"name": "Rhein-Sieg-Kreis I", "FPÖ": 0.3426317, "ÖVP": 0.1684285, "SPÖ": 0.2155885, "NEOS": 0.1077942, "Grüne": 0.0548596, "KPÖ": 0.0411082, "FDP": 0.0480935, "FW": 0.0060966, "OTH": 0.0153992},
+{"name": "Rhein-Sieg-Kreis II", "FPÖ": 0.4157613, "ÖVP": 0.1347902, "SPÖ": 0.1689624, "NEOS": 0.1205518, "Grüne": 0.0512582, "KPÖ": 0.0344184, "FDP": 0.0534341, "FW": 0.0046867, "OTH": 0.0161369},
+{"name": "Oberbergischer Kreis", "FPÖ": 0.3517545, "ÖVP": 0.2059051, "SPÖ": 0.1973257, "NEOS": 0.0838872, "Grüne": 0.0571959, "KPÖ": 0.0437419, "FDP": 0.0439349, "FW": 0.0067222, "OTH": 0.0095326},
+{"name": "Rheinisch-Bergischer Kreis", "FPÖ": 0.4072288, "ÖVP": 0.1196597, "SPÖ": 0.1814195, "NEOS": 0.1331696, "Grüne": 0.0492149, "KPÖ": 0.0330331, "FDP": 0.0536495, "FW": 0.005255, "OTH": 0.0173699},
+{"name": "Leverkusen – Köln IV", "FPÖ": 0.2443977, "ÖVP": 0.1479752, "SPÖ": 0.3121799, "NEOS": 0.1050146, "Grüne": 0.0868757, "KPÖ": 0.0450505, "FDP": 0.0372846, "FW": 0.0040375, "OTH": 0.0171842},
+{"name": "Wuppertal I", "FPÖ": 0.2299591, "ÖVP": 0.1731791, "SPÖ": 0.3170218, "NEOS": 0.0813847, "Grüne": 0.0861164, "KPÖ": 0.0510945, "FDP": 0.039097, "FW": 0.0041672, "OTH": 0.0179803},
+{"name": "Solingen – Remscheid – Wuppertal II", "FPÖ": 0.304496, "ÖVP": 0.1738634, "SPÖ": 0.2575059, "NEOS": 0.0817628, "Grüne": 0.0704852, "KPÖ": 0.0440155, "FDP": 0.0444976, "FW": 0.0036378, "OTH": 0.0197359},
+{"name": "Mettmann I", "FPÖ": 0.3461644, "ÖVP": 0.1494371, "SPÖ": 0.212806, "NEOS": 0.1182255, "Grüne": 0.0605315, "KPÖ": 0.0394596, "FDP": 0.0534392, "FW": 0.003858, "OTH": 0.0160787},
+{"name": "Mettmann II", "FPÖ": 0.3385619, "ÖVP": 0.1622079, "SPÖ": 0.2357674, "NEOS": 0.1046807, "Grüne": 0.0622426, "KPÖ": 0.0402579, "FDP": 0.0497998, "FW": 0.0036526, "OTH": 0.0028292},
+{"name": "Düsseldorf I", "FPÖ": 0.3412403, "ÖVP": 0.0926359, "SPÖ": 0.200396, "NEOS": 0.1644759, "Grüne": 0.068059, "KPÖ": 0.0343197, "FDP": 0.0738071, "FW": 0.0023797, "OTH": 0.0226863},
+{"name": "Düsseldorf II", "FPÖ": 0.2711546, "ÖVP": 0.1228227, "SPÖ": 0.2182464, "NEOS": 0.1719517, "Grüne": 0.0878654, "KPÖ": 0.0451103, "FDP": 0.0514799, "FW": 0.0030253, "OTH": 0.0283437},
+{"name": "Neuss I", "FPÖ": 0.3433522, "ÖVP": 0.1598527, "SPÖ": 0.2563318, "NEOS": 0.0803993, "Grüne": 0.0662112, "KPÖ": 0.0404287, "FDP": 0.0495457, "FW": 0.0038784, "OTH": 0},
+{"name": "Mönchengladbach", "FPÖ": 0.3437815, "ÖVP": 0.1737901, "SPÖ": 0.2497639, "NEOS": 0.0940176, "Grüne": 0, "KPÖ": 0.0435076, "FDP": 0.0431707, "FW": 0.004485, "OTH": 0.0474836},
+{"name": "Krefeld I – Neuss II", "FPÖ": 0.3664254, "ÖVP": 0.1415294, "SPÖ": 0.217141, "NEOS": 0.1066317, "Grüne": 0.0649484, "KPÖ": 0.0371722, "FDP": 0.0600176, "FW": 0.0061342, "OTH": 0},
+{"name": "Viersen", "FPÖ": 0.3825048, "ÖVP": 0.1530019, "SPÖ": 0.1979462, "NEOS": 0.1013638, "Grüne": 0.0592882, "KPÖ": 0.0354373, "FDP": 0.0519695, "FW": 0.0060568, "OTH": 0.0124314},
+{"name": "Kleve", "FPÖ": 0.3967152, "ÖVP": 0.1540642, "SPÖ": 0.2089495, "NEOS": 0.087624, "Grüne": 0.0568112, "KPÖ": 0.0322334, "FDP": 0.0430163, "FW": 0.0071057, "OTH": 0.0134806},
+{"name": "Wesel I", "FPÖ": 0.3355626, "ÖVP": 0.1677813, "SPÖ": 0.2709571, "NEOS": 0.0790693, "Grüne": 0.0588199, "KPÖ": 0.0357205, "FDP": 0.0409901, "FW": 0.0053136, "OTH": 0.0057856},
+{"name": "Krefeld II – Wesel II", "FPÖ": 0.3042229, "ÖVP": 0.1602177, "SPÖ": 0.2889641, "NEOS": 0.0829699, "Grüne": 0.059128, "KPÖ": 0.0417581, "FDP": 0.0453539, "FW": 0.0049876, "OTH": 0.0123978},
+{"name": "Duisburg I", "FPÖ": 0.2089978, "ÖVP": 0.1681482, "SPÖ": 0.370496, "NEOS": 0.0740992, "Grüne": 0.0816991, "KPÖ": 0.0480328, "FDP": 0.0317997, "FW": 0.0043773, "OTH": 0.0123499},
+{"name": "Duisburg II", "FPÖ": 0.1888606, "ÖVP": 0.2514977, "SPÖ": 0.3141349, "NEOS": 0.0664334, "Grüne": 0.0863634, "KPÖ": 0.0552371, "FDP": 0.0252618, "FW": 0.0046188, "OTH": 0.0075924},
+{"name": "Oberhausen – Wesel III", "FPÖ": 0.2548146, "ÖVP": 0.1989259, "SPÖ": 0.2974415, "NEOS": 0.0776758, "Grüne": 0.0738868, "KPÖ": 0.0446781, "FDP": 0.0320938, "FW": 0.0034327, "OTH": 0.0170508},
+{"name": "Mülheim – Essen I", "FPÖ": 0.2780237, "ÖVP": 0.1673914, "SPÖ": 0.3136184, "NEOS": 0.0885058, "Grüne": 0.0654173, "KPÖ": 0.0410983, "FDP": 0.0410976, "FW": 0.0048475, "OTH": 0},
+{"name": "Essen II", "FPÖ": 0.2351031, "ÖVP": 0.2198738, "SPÖ": 0.2884059, "NEOS": 0.0780504, "Grüne": 0.0894724, "KPÖ": 0.0526213, "FDP": 0.0282224, "FW": 0.0044434, "OTH": 0.0038073},
+{"name": "Essen III", "FPÖ": 0.3416881, "ÖVP": 0.113896, "SPÖ": 0.236406, "NEOS": 0.1512233, "Grüne": 0.0717832, "KPÖ": 0.0329073, "FDP": 0.0470341, "FW": 0.0031478, "OTH": 0.0019142},
+{"name": "Recklinghausen I", "FPÖ": 0.2742955, "ÖVP": 0.1923878, "SPÖ": 0.3152493, "NEOS": 0.0647642, "Grüne": 0.0561925, "KPÖ": 0.0418146, "FDP": 0.0340034, "FW": 0.0041493, "OTH": 0.0171435},
+{"name": "Recklinghausen II", "FPÖ": 0.3027346, "ÖVP": 0.1992684, "SPÖ": 0.2778261, "NEOS": 0.0689775, "Grüne": 0.0555652, "KPÖ": 0.0384623, "FDP": 0.0337997, "FW": 0.0051638, "OTH": 0.0182024},
+{"name": "Gelsenkirchen", "FPÖ": 0.2223564, "ÖVP": 0.2483461, "SPÖ": 0.3022507, "NEOS": 0.0587175, "Grüne": 0.0808569, "KPÖ": 0.0486069, "FDP": 0.0291045, "FW": 0.0049482, "OTH": 0.0048129},
+{"name": "Steinfurt I – Borken I", "FPÖ": 0.4054261, "ÖVP": 0.1464577, "SPÖ": 0.2201716, "NEOS": 0.0911724, "Grüne": 0.0581951, "KPÖ": 0.0312121, "FDP": 0.0408778, "FW": 0.0064872, "OTH": 0},
+{"name": "Bottrop – Recklinghausen III", "FPÖ": 0.3037547, "ÖVP": 0.2012255, "SPÖ": 0.282674, "NEOS": 0.0622841, "Grüne": 0.0546184, "KPÖ": 0.0407949, "FDP": 0.0330969, "FW": 0.0052618, "OTH": 0.0162897},
+{"name": "Borken II", "FPÖ": 0.4639857, "ÖVP": 0.1249565, "SPÖ": 0.1898564, "NEOS": 0.0929909, "Grüne": 0.0494014, "KPÖ": 0.0284634, "FDP": 0.0427174, "FW": 0.0076283, "OTH": 0},
+{"name": "Coesfeld – Steinfurt II", "FPÖ": 0.4367503, "ÖVP": 0.1168499, "SPÖ": 0.1944305, "NEOS": 0.1225966, "Grüne": 0.0440581, "KPÖ": 0.0269712, "FDP": 0.0405912, "FW": 0.0043432, "OTH": 0.013409},
+{"name": "Steinfurt III", "FPÖ": 0.3603176, "ÖVP": 0.1473594, "SPÖ": 0.2395779, "NEOS": 0.1121833, "Grüne": 0.0570424, "KPÖ": 0.0343194, "FDP": 0.0379384, "FW": 0.0046066, "OTH": 0.0066549},
+{"name": "Münster", "FPÖ": 0.2735148, "ÖVP": 0.0623806, "SPÖ": 0.1976984, "NEOS": 0.2994268, "Grüne": 0.0652597, "KPÖ": 0.0254851, "FDP": 0.0445943, "FW": 0.0018895, "OTH": 0.0297507},
+{"name": "Warendorf", "FPÖ": 0.4025196, "ÖVP": 0.1548152, "SPÖ": 0.2012598, "NEOS": 0.1054679, "Grüne": 0.0541853, "KPÖ": 0.0347907, "FDP": 0.0394554, "FW": 0.0075061, "OTH": 0},
+{"name": "Gütersloh I", "FPÖ": 0.3968922, "ÖVP": 0.1631456, "SPÖ": 0.2013083, "NEOS": 0.0858661, "Grüne": 0.0524737, "KPÖ": 0.0400462, "FDP": 0.0422613, "FW": 0.0056036, "OTH": 0.0124029},
+{"name": "Bielefeld – Gütersloh II", "FPÖ": 0.2455884, "ÖVP": 0.1350736, "SPÖ": 0.2569232, "NEOS": 0.1511313, "Grüne": 0.0954016, "KPÖ": 0.0428311, "FDP": 0.0393869, "FW": 0.002493, "OTH": 0.0311708},
+{"name": "Herford – Minden-Lübbecke II", "FPÖ": 0.2862455, "ÖVP": 0.2025591, "SPÖ": 0.2776867, "NEOS": 0.0684707, "Grüne": 0.0570589, "KPÖ": 0.0457022, "FDP": 0.0392384, "FW": 0.0059208, "OTH": 0.0171177},
+{"name": "Minden-Lübbecke I", "FPÖ": 0.3079206, "ÖVP": 0.2100767, "SPÖ": 0.2369358, "NEOS": 0.0892106, "Grüne": 0.0537182, "KPÖ": 0.0427528, "FDP": 0.040116, "FW": 0.0077583, "OTH": 0.011511},
+{"name": "Lippe I", "FPÖ": 0.300446, "ÖVP": 0.2092563, "SPÖ": 0.2255745, "NEOS": 0.1161469, "Grüne": 0.0575935, "KPÖ": 0.0425371, "FDP": 0.040824, "FW": 0.0076218, "OTH": 0},
+{"name": "Höxter – Gütersloh III – Lippe II", "FPÖ": 0.4141515, "ÖVP": 0.1974889, "SPÖ": 0.1792739, "NEOS": 0.0719013, "Grüne": 0.0508103, "KPÖ": 0.0377314, "FDP": 0.0413767, "FW": 0.0072661, "OTH": 0},
+{"name": "Paderborn", "FPÖ": 0.4284471, "ÖVP": 0.1723205, "SPÖ": 0.1431296, "NEOS": 0.0998141, "Grüne": 0.0593235, "KPÖ": 0.0371048, "FDP": 0.0396271, "FW": 0.0032838, "OTH": 0.0169496},
+{"name": "Hagen – Ennepe-Ruhr-Kreis I", "FPÖ": 0.2882196, "ÖVP": 0.2134221, "SPÖ": 0.2553087, "NEOS": 0.0817786, "Grüne": 0.0588407, "KPÖ": 0.0479431, "FDP": 0.038449, "FW": 0.005068, "OTH": 0.0109703},
+{"name": "Ennepe-Ruhr-Kreis II", "FPÖ": 0.2953123, "ÖVP": 0.1586467, "SPÖ": 0.2876666, "NEOS": 0.0984374, "Grüne": 0.0582979, "KPÖ": 0.0381108, "FDP": 0.038937, "FW": 0.0045215, "OTH": 0.0200698},
+{"name": "Bochum I", "FPÖ": 0.2343974, "ÖVP": 0.1343498, "SPÖ": 0.3115771, "NEOS": 0.1305384, "Grüne": 0.0895665, "KPÖ": 0.0371948, "FDP": 0.0348076, "FW": 0.0027947, "OTH": 0.0247737},
+{"name": "Herne – Bochum II", "FPÖ": 0.2244814, "ÖVP": 0.2036435, "SPÖ": 0.317305, "NEOS": 0.0805102, "Grüne": 0.0786159, "KPÖ": 0.0439455, "FDP": 0.0281127, "FW": 0.0034951, "OTH": 0.0198908},
+{"name": "Dortmund I", "FPÖ": 0.2253334, "ÖVP": 0.151173, "SPÖ": 0.2909367, "NEOS": 0.1331083, "Grüne": 0.0874712, "KPÖ": 0.0408214, "FDP": 0.0341769, "FW": 0.0027513, "OTH": 0.0342279},
+{"name": "Dortmund II", "FPÖ": 0.234167, "ÖVP": 0.174681, "SPÖ": 0.3059278, "NEOS": 0.0972548, "Grüne": 0.08498, "KPÖ": 0.044958, "FDP": 0.0332907, "FW": 0.0030236, "OTH": 0.0217171},
+{"name": "Unna I", "FPÖ": 0.2829139, "ÖVP": 0.1765838, "SPÖ": 0.3019014, "NEOS": 0.0854438, "Grüne": 0.0579119, "KPÖ": 0.0379811, "FDP": 0.0329835, "FW": 0.0043436, "OTH": 0.0199369},
+{"name": "Hamm – Unna II", "FPÖ": 0.2849391, "ÖVP": 0.2035279, "SPÖ": 0.3048185, "NEOS": 0.060585, "Grüne": 0.0672115, "KPÖ": 0.0431111, "FDP": 0.0319319, "FW": 0.003875, "OTH": 0},
+{"name": "Soest", "FPÖ": 0.3615092, "ÖVP": 0.1880236, "SPÖ": 0.2180686, "NEOS": 0.0930426, "Grüne": 0.0571824, "KPÖ": 0.037732, "FDP": 0.0392905, "FW": 0.0051511, "OTH": 0},
+{"name": "Hochsauerlandkreis", "FPÖ": 0.4607841, "ÖVP": 0.1535947, "SPÖ": 0.2067249, "NEOS": 0.0589263, "Grüne": 0.0454022, "KPÖ": 0.0311405, "FDP": 0.0366964, "FW": 0.0067309, "OTH": 0},
+{"name": "Siegen-Wittgenstein", "FPÖ": 0.3256193, "ÖVP": 0.1957535, "SPÖ": 0.2339494, "NEOS": 0.0716171, "Grüne": 0.0611133, "KPÖ": 0.0428064, "FDP": 0.0378619, "FW": 0.0074068, "OTH": 0.0238724},
+{"name": "Olpe – Märkischer Kreis I", "FPÖ": 0.4054097, "ÖVP": 0.1925937, "SPÖ": 0.2002974, "NEOS": 0.060667, "Grüne": 0.0491114, "KPÖ": 0.0392491, "FDP": 0.0380662, "FW": 0.0059389, "OTH": 0.0086667},
+{"name": "Märkischer Kreis II", "FPÖ": 0.3675, "ÖVP": 0.1979575, "SPÖ": 0.2150065, "NEOS": 0.0615657, "Grüne": 0.0615657, "KPÖ": 0.0406308, "FDP": 0.0375198, "FW": 0.0040464, "OTH": 0.0142075},
+{"name": "Nordsachsen", "FPÖ": 0.2349299, "ÖVP": 0.4115971, "SPÖ": 0.0939719, "NEOS": 0.023493, "Grüne": 0.0789364, "KPÖ": 0.0812668, "FDP": 0.029909, "FW": 0.0205233, "OTH": 0.0253724},
+{"name": "Leipzig I", "FPÖ": 0.2107199, "ÖVP": 0.2450231, "SPÖ": 0.1146708, "NEOS": 0.0735069, "Grüne": 0.2107199, "KPÖ": 0.0757834, "FDP": 0.0312023, "FW": 0.0089708, "OTH": 0.0294028},
+{"name": "Leipzig II", "FPÖ": 0.1558691, "ÖVP": 0.182172, "SPÖ": 0.0828054, "NEOS": 0.0993665, "Grüne": 0.3584989, "KPÖ": 0.0686946, "FDP": 0.0305862, "FW": 0.0073946, "OTH": 0.0146127},
+{"name": "Leipzig-Land", "FPÖ": 0.2442178, "ÖVP": 0.3792325, "SPÖ": 0.1082103, "NEOS": 0.0347464, "Grüne": 0.0863697, "KPÖ": 0.0849569, "FDP": 0.0339502, "FW": 0.0253379, "OTH": 0.0029783},
+{"name": "Meißen", "FPÖ": 0.2264122, "ÖVP": 0.4309442, "SPÖ": 0.0694458, "NEOS": 0.0399551, "Grüne": 0.0894233, "KPÖ": 0.0840909, "FDP": 0.0360404, "FW": 0.0141751, "OTH": 0.0095131},
+{"name": "Bautzen I", "FPÖ": 0.2262293, "ÖVP": 0.4533974, "SPÖ": 0.0666485, "NEOS": 0.0206516, "Grüne": 0.0919937, "KPÖ": 0.0855282, "FDP": 0.0292319, "FW": 0.0178711, "OTH": 0.0084484},
+{"name": "Görlitz", "FPÖ": 0.2354403, "ÖVP": 0.4757452, "SPÖ": 0.0612923, "NEOS": 0.0291868, "Grüne": 0.0622652, "KPÖ": 0.0870169, "FDP": 0.0283387, "FW": 0.0148772, "OTH": 0.0058374},
+{"name": "Sächsische Schweiz-Osterzgebirge", "FPÖ": 0.212188, "ÖVP": 0.4589617, "SPÖ": 0.0747799, "NEOS": 0.0280425, "Grüne": 0.0850621, "KPÖ": 0.0855158, "FDP": 0.0303145, "FW": 0.0167228, "OTH": 0.0084127},
+{"name": "Dresden I", "FPÖ": 0.2492259, "ÖVP": 0.2683971, "SPÖ": 0.1068111, "NEOS": 0.0995078, "Grüne": 0.129634, "KPÖ": 0.0764349, "FDP": 0.0351228, "FW": 0.0074788, "OTH": 0.0273875},
+{"name": "Dresden II – Bautzen II", "FPÖ": 0.2238914, "ÖVP": 0.2766261, "SPÖ": 0.0869661, "NEOS": 0.1054695, "Grüne": 0.151728, "KPÖ": 0.0718903, "FDP": 0.0328829, "FW": 0.008913, "OTH": 0.0416327},
+{"name": "Mittelsachsen", "FPÖ": 0.2509656, "ÖVP": 0.421994, "SPÖ": 0.0845847, "NEOS": 0.0232376, "Grüne": 0.0836552, "KPÖ": 0.087401, "FDP": 0.0294694, "FW": 0.0186925, "OTH": 0},
+{"name": "Chemnitz", "FPÖ": 0.2097598, "ÖVP": 0.3156199, "SPÖ": 0.1636911, "NEOS": 0.0450886, "Grüne": 0.0980186, "KPÖ": 0.1049909, "FDP": 0.0307453, "FW": 0.0095416, "OTH": 0.0225443},
+{"name": "Chemnitzer Umland – Erzgebirgskreis II", "FPÖ": 0.246658, "ÖVP": 0.3935843, "SPÖ": 0.1041841, "NEOS": 0.0249329, "Grüne": 0.0917176, "KPÖ": 0.0926808, "FDP": 0.0282481, "FW": 0.0179941, "OTH": 0},
+{"name": "Erzgebirgskreis I", "FPÖ": 0.2427773, "ÖVP": 0.4525368, "SPÖ": 0.0640932, "NEOS": 0.0155377, "Grüne": 0.0660354, "KPÖ": 0.0952324, "FDP": 0.0286173, "FW": 0.0225455, "OTH": 0.0126244},
+{"name": "Zwickau", "FPÖ": 0.2375845, "ÖVP": 0.399984, "SPÖ": 0.0992442, "NEOS": 0.0230567, "Grüne": 0.075185, "KPÖ": 0.1016315, "FDP": 0.0300985, "FW": 0.0171762, "OTH": 0.0160395},
+{"name": "Vogtlandkreis", "FPÖ": 0.2486493, "ÖVP": 0.3987598, "SPÖ": 0.0920923, "NEOS": 0.0294695, "Grüne": 0.0874877, "KPÖ": 0.1013846, "FDP": 0.0268044, "FW": 0.0153523, "OTH": 0},
+{"name": "Waldeck", "FPÖ": 0.3004387, "ÖVP": 0.2067328, "SPÖ": 0.2724235, "NEOS": 0.0685889, "Grüne": 0.0550643, "KPÖ": 0.0420875, "FDP": 0.0384631, "FW": 0.0162012, "OTH": 0},
+{"name": "Kassel", "FPÖ": 0.2306777, "ÖVP": 0.1537851, "SPÖ": 0.2629536, "NEOS": 0.13385, "Grüne": 0.111067, "KPÖ": 0.0500646, "FDP": 0.0341122, "FW": 0.0083011, "OTH": 0.0151887},
+{"name": "Werra-Meißner – Hersfeld-Rotenburg", "FPÖ": 0.3074786, "ÖVP": 0.215808, "SPÖ": 0.2654629, "NEOS": 0.0515647, "Grüne": 0.0506098, "KPÖ": 0.0398072, "FDP": 0.0365568, "FW": 0.0193433, "OTH": 0.0133686},
+{"name": "Schwalm-Eder", "FPÖ": 0.2901138, "ÖVP": 0.23132, "SPÖ": 0.2727648, "NEOS": 0.0549385, "Grüne": 0.0510832, "KPÖ": 0.0411792, "FDP": 0.0391198, "FW": 0.0194807, "OTH": 0},
+{"name": "Marburg", "FPÖ": 0.2770356, "ÖVP": 0.1742183, "SPÖ": 0.2884598, "NEOS": 0.0866331, "Grüne": 0.0723529, "KPÖ": 0.0370983, "FDP": 0.0371659, "FW": 0.0118038, "OTH": 0.0152322},
+{"name": "Lahn-Dill", "FPÖ": 0.327579, "ÖVP": 0.2206145, "SPÖ": 0.2301649, "NEOS": 0.0649428, "Grüne": 0.0506172, "KPÖ": 0.0408036, "FDP": 0.0388568, "FW": 0.0140058, "OTH": 0.0124155},
+{"name": "Gießen", "FPÖ": 0.2905092, "ÖVP": 0.1815682, "SPÖ": 0.265663, "NEOS": 0.0821835, "Grüne": 0.0668936, "KPÖ": 0.0424915, "FDP": 0.0399506, "FW": 0.0164062, "OTH": 0.0143343},
+{"name": "Fulda", "FPÖ": 0.4173318, "ÖVP": 0.2207136, "SPÖ": 0.1310788, "NEOS": 0.0636118, "Grüne": 0.0404802, "KPÖ": 0.0345063, "FDP": 0.0472645, "FW": 0.0218814, "OTH": 0.0231316},
+{"name": "Main-Kinzig – Wetterau II – Schotten", "FPÖ": 0.3269509, "ÖVP": 0.2387413, "SPÖ": 0.1965541, "NEOS": 0.0709512, "Grüne": 0.0469812, "KPÖ": 0.0397257, "FDP": 0.0446062, "FW": 0.0182309, "OTH": 0.0172584},
+{"name": "Hochtaunus", "FPÖ": 0.3617969, "ÖVP": 0.1579272, "SPÖ": 0.1866412, "NEOS": 0.1167704, "Grüne": 0.0516853, "KPÖ": 0.0354728, "FDP": 0.0628588, "FW": 0.0115333, "OTH": 0.0153142},
+{"name": "Wetterau I", "FPÖ": 0.3231508, "ÖVP": 0.1678083, "SPÖ": 0.2464384, "NEOS": 0.0930137, "Grüne": 0.049863, "KPÖ": 0.0367161, "FDP": 0.0513732, "FW": 0.0153352, "OTH": 0.0163014},
+{"name": "Rheingau-Taunus – Limburg", "FPÖ": 0.3535268, "ÖVP": 0.166196, "SPÖ": 0.2123082, "NEOS": 0.1037524, "Grüne": 0.0480335, "KPÖ": 0.0354682, "FDP": 0.0538423, "FW": 0.0115017, "OTH": 0.0153707},
+{"name": "Wiesbaden", "FPÖ": 0.2903246, "ÖVP": 0.1314499, "SPÖ": 0.2108873, "NEOS": 0.1409067, "Grüne": 0.0992967, "KPÖ": 0.0463879, "FDP": 0.0528959, "FW": 0.0079916, "OTH": 0.0198593},
+{"name": "Hanau", "FPÖ": 0.304098, "ÖVP": 0.1815085, "SPÖ": 0.2404275, "NEOS": 0.0817263, "Grüne": 0.0722233, "KPÖ": 0.0473847, "FDP": 0.0469208, "FW": 0.0114563, "OTH": 0.0142546},
+{"name": "Main-Taunus", "FPÖ": 0.3792401, "ÖVP": 0.1248253, "SPÖ": 0.1696099, "NEOS": 0.1334011, "Grüne": 0.0571719, "KPÖ": 0.0347307, "FDP": 0.0704576, "FW": 0.0096005, "OTH": 0.020963},
+{"name": "Frankfurt am Main I", "FPÖ": 0.2435628, "ÖVP": 0.1011722, "SPÖ": 0.2407524, "NEOS": 0.1517583, "Grüne": 0.1199078, "KPÖ": 0.0485405, "FDP": 0.0620966, "FW": 0.0050427, "OTH": 0.0271666},
+{"name": "Frankfurt am Main II", "FPÖ": 0.257946, "ÖVP": 0.0866096, "SPÖ": 0.1741606, "NEOS": 0.2485319, "Grüne": 0.0931995, "KPÖ": 0.0417778, "FDP": 0.0619475, "FW": 0.0047606, "OTH": 0.0310665},
+{"name": "Groß-Gerau", "FPÖ": 0.2868467, "ÖVP": 0.1552569, "SPÖ": 0.273593, "NEOS": 0.0766818, "Grüne": 0.0842553, "KPÖ": 0.0533437, "FDP": 0.042552, "FW": 0.0123236, "OTH": 0.015147},
+{"name": "Offenbach", "FPÖ": 0.2951749, "ÖVP": 0.1438032, "SPÖ": 0.2100283, "NEOS": 0.1390728, "Grüne": 0.0974456, "KPÖ": 0.0532197, "FDP": 0.0511968, "FW": 0.0100588, "OTH": 0},
+{"name": "Darmstadt", "FPÖ": 0.2527991, "ÖVP": 0.1287666, "SPÖ": 0.1997776, "NEOS": 0.2054585, "Grüne": 0.0719578, "KPÖ": 0.0420288, "FDP": 0.0453565, "FW": 0.0065144, "OTH": 0.0473407},
+{"name": "Odenwald", "FPÖ": 0.3251242, "ÖVP": 0.1769058, "SPÖ": 0.2371494, "NEOS": 0.0860623, "Grüne": 0.0583311, "KPÖ": 0.0422838, "FDP": 0.047215, "FW": 0.0135409, "OTH": 0.0133875},
+{"name": "Bergstraße", "FPÖ": 0.3470188, "ÖVP": 0.1950188, "SPÖ": 0.2007547, "NEOS": 0.0869937, "Grüne": 0.0516226, "KPÖ": 0.0407977, "FDP": 0.0495083, "FW": 0.0120339, "OTH": 0.0162516},
+{"name": "Eichsfeld – Nordhausen – Kyffhäuserkreis", "FPÖ": 0.2714419, "ÖVP": 0.3856818, "SPÖ": 0.0849476, "NEOS": 0.0175754, "Grüne": 0.1161927, "KPÖ": 0.0831605, "FDP": 0.028958, "FW": 0.0100894, "OTH": 0.0019528},
+{"name": "Eisenach – Wartburgkreis – Unstrut-Hainich-Kreis", "FPÖ": 0.2231841, "ÖVP": 0.3785281, "SPÖ": 0.1169996, "NEOS": 0.0235966, "Grüne": 0.0993022, "KPÖ": 0.091645, "FDP": 0.0251082, "FW": 0.0180397, "OTH": 0.0235966},
+{"name": "Jena – Sömmerda – Weimarer Land I", "FPÖ": 0.1813661, "ÖVP": 0.318616, "SPÖ": 0.1147018, "NEOS": 0.0588214, "Grüne": 0.1911696, "KPÖ": 0.0895764, "FDP": 0.0300992, "FW": 0.0136887, "OTH": 0.0019607},
+{"name": "Gotha – Ilm-Kreis", "FPÖ": 0.1973369, "ÖVP": 0.406514, "SPÖ": 0.0986684, "NEOS": 0.0296005, "Grüne": 0.1262956, "KPÖ": 0.0909989, "FDP": 0.0262349, "FW": 0.0164573, "OTH": 0.0078935},
+{"name": "Erfurt – Weimar – Weimarer Land II", "FPÖ": 0.1569999, "ÖVP": 0.2571716, "SPÖ": 0.076092, "NEOS": 0.0298589, "Grüne": 0.3544538, "KPÖ": 0.086065, "FDP": 0.0277369, "FW": 0.0096955, "OTH": 0.0019264},
+{"name": "Gera – Greiz – Altenburger Land", "FPÖ": 0.192936, "ÖVP": 0.4321766, "SPÖ": 0.1051501, "NEOS": 0.0183289, "Grüne": 0.1147969, "KPÖ": 0.0951276, "FDP": 0.0287455, "FW": 0.0127384, "OTH": 0},
+{"name": "Saalfeld-Rudolstadt – Saale-Holzland-Kreis – Saale-Orla-Kreis", "FPÖ": 0.2009027, "ÖVP": 0.4339889, "SPÖ": 0.0809462, "NEOS": 0.0243814, "Grüne": 0.1199565, "KPÖ": 0.0963919, "FDP": 0.0273678, "FW": 0.0160646, "OTH": 0},
+{"name": "Suhl – Schmalkalden-Meiningen – Hildburghausen – Sonneberg", "FPÖ": 0.1923552, "ÖVP": 0.4174306, "SPÖ": 0.1041098, "NEOS": 0.0158643, "Grüne": 0.1041098, "KPÖ": 0.1002204, "FDP": 0.0257651, "FW": 0.0252721, "OTH": 0.0148728},
+{"name": "Neuwied", "FPÖ": 0.350666, "ÖVP": 0.2068536, "SPÖ": 0.2167037, "NEOS": 0.0610711, "Grüne": 0.0492508, "KPÖ": 0.0458111, "FDP": 0.043297, "FW": 0.0164965, "OTH": 0.0098502},
+{"name": "Ahrweiler", "FPÖ": 0.3789215, "ÖVP": 0.1725876, "SPÖ": 0.1860861, "NEOS": 0.0877401, "Grüne": 0.0501372, "KPÖ": 0.0371385, "FDP": 0.0459522, "FW": 0.0192607, "OTH": 0.0221761},
+{"name": "Koblenz", "FPÖ": 0.3436927, "ÖVP": 0.1549987, "SPÖ": 0.2349048, "NEOS": 0.0933843, "Grüne": 0.0568008, "KPÖ": 0.0383482, "FDP": 0.0460079, "FW": 0.0183845, "OTH": 0.0134781},
+{"name": "Mosel/Rhein-Hunsrück", "FPÖ": 0.3738908, "ÖVP": 0.1889029, "SPÖ": 0.1889029, "NEOS": 0.0704716, "Grüne": 0.0450235, "KPÖ": 0.0386148, "FDP": 0.0521257, "FW": 0.0254287, "OTH": 0.0166391},
+{"name": "Kreuznach", "FPÖ": 0.3192032, "ÖVP": 0.209508, "SPÖ": 0.2599085, "NEOS": 0.0533652, "Grüne": 0.0434828, "KPÖ": 0.0425711, "FDP": 0.0436528, "FW": 0.0184259, "OTH": 0.0098825},
+{"name": "Bitburg", "FPÖ": 0.3964618, "ÖVP": 0.1646993, "SPÖ": 0.2011896, "NEOS": 0.0542423, "Grüne": 0.0364903, "KPÖ": 0.0366322, "FDP": 0.0445888, "FW": 0.0518886, "OTH": 0.0138071},
+{"name": "Trier", "FPÖ": 0.3047131, "ÖVP": 0.1404846, "SPÖ": 0.2997665, "NEOS": 0.0821142, "Grüne": 0.0494664, "KPÖ": 0.0432637, "FDP": 0.0460729, "FW": 0.020268, "OTH": 0.0138506},
+{"name": "Montabaur", "FPÖ": 0.3418732, "ÖVP": 0.1963138, "SPÖ": 0.224085, "NEOS": 0.0603306, "Grüne": 0.048839, "KPÖ": 0.0405888, "FDP": 0.0440933, "FW": 0.0208933, "OTH": 0.0229831},
+{"name": "Mainz", "FPÖ": 0.2679938, "ÖVP": 0.1001295, "SPÖ": 0.2326539, "NEOS": 0.1874975, "Grüne": 0.0893313, "KPÖ": 0.0322985, "FDP": 0.0502448, "FW": 0.0094192, "OTH": 0.0304315},
+{"name": "Worms", "FPÖ": 0.3443436, "ÖVP": 0.1980219, "SPÖ": 0.216556, "NEOS": 0.0770627, "Grüne": 0.0477984, "KPÖ": 0.0381915, "FDP": 0.0454997, "FW": 0.0159431, "OTH": 0.0165831},
+{"name": "Ludwigshafen/Frankenthal", "FPÖ": 0.2677323, "ÖVP": 0.2282146, "SPÖ": 0.2588408, "NEOS": 0.0760715, "Grüne": 0.0474212, "KPÖ": 0.0479556, "FDP": 0.0433759, "FW": 0.0175447, "OTH": 0.0128432},
+{"name": "Neustadt – Speyer", "FPÖ": 0.3403561, "ÖVP": 0.1912664, "SPÖ": 0.2148069, "NEOS": 0.0922002, "Grüne": 0.0382533, "KPÖ": 0.0397557, "FDP": 0.0477079, "FW": 0.018979, "OTH": 0.0166745},
+{"name": "Kaiserslautern", "FPÖ": 0.2406792, "ÖVP": 0.2546606, "SPÖ": 0.2796273, "NEOS": 0.0569241, "Grüne": 0.0419441, "KPÖ": 0.0495522, "FDP": 0.039211, "FW": 0.0264161, "OTH": 0.0109854},
+{"name": "Pirmasens", "FPÖ": 0.3283427, "ÖVP": 0.2474895, "SPÖ": 0.2041049, "NEOS": 0.0443706, "Grüne": 0.0354965, "KPÖ": 0.0492504, "FDP": 0.0405758, "FW": 0.0207892, "OTH": 0.0295804},
+{"name": "Südpfalz", "FPÖ": 0.3727718, "ÖVP": 0.1951685, "SPÖ": 0.1873617, "NEOS": 0.0751399, "Grüne": 0.0390337, "KPÖ": 0.0418589, "FDP": 0.0419891, "FW": 0.0183771, "OTH": 0.0282994},
+{"name": "Altötting", "FPÖ": 0.4256439, "ÖVP": 0.2278504, "SPÖ": 0.0843531, "NEOS": 0.0736878, "Grüne": 0.0416918, "KPÖ": 0.0320912, "FDP": 0.0345233, "FW": 0.0530106, "OTH": 0.0271481},
+{"name": "Erding – Ebersberg", "FPÖ": 0.439914, "ÖVP": 0.1495133, "SPÖ": 0.0968002, "NEOS": 0.128428, "Grüne": 0.0373783, "KPÖ": 0.0257258, "FDP": 0.0483841, "FW": 0.0412699, "OTH": 0.0325862},
+{"name": "Freising", "FPÖ": 0.4176524, "ÖVP": 0.1753946, "SPÖ": 0.1104695, "NEOS": 0.1220979, "Grüne": 0.0406993, "KPÖ": 0.0275528, "FDP": 0.0422019, "FW": 0.0523032, "OTH": 0.0116284},
+{"name": "Fürstenfeldbruck", "FPÖ": 0.4164568, "ÖVP": 0.1378413, "SPÖ": 0.1466397, "NEOS": 0.1173118, "Grüne": 0.0361711, "KPÖ": 0.0261463, "FDP": 0.0492247, "FW": 0.0340371, "OTH": 0.0361711},
+{"name": "Ingolstadt", "FPÖ": 0.4509427, "ÖVP": 0.1924405, "SPÖ": 0.1053157, "NEOS": 0.0708487, "Grüne": 0.0382966, "KPÖ": 0.0287624, "FDP": 0.0360193, "FW": 0.0448219, "OTH": 0.0325521},
+{"name": "München-Nord", "FPÖ": 0.3084313, "ÖVP": 0.0856754, "SPÖ": 0.1884858, "NEOS": 0.2303715, "Grüne": 0.0628286, "KPÖ": 0.0311099, "FDP": 0.0637248, "FW": 0.0112858, "OTH": 0.018087},
+{"name": "München-Ost", "FPÖ": 0.346073, "ÖVP": 0.0867566, "SPÖ": 0.1477722, "NEOS": 0.2307153, "Grüne": 0.0581555, "KPÖ": 0.0304702, "FDP": 0.0598475, "FW": 0.0116087, "OTH": 0.0286011},
+{"name": "München-Süd", "FPÖ": 0.2980371, "ÖVP": 0.0862739, "SPÖ": 0.1431362, "NEOS": 0.2921548, "Grüne": 0.0529408, "KPÖ": 0.0301617, "FDP": 0.0545637, "FW": 0.0113595, "OTH": 0.0313723},
+{"name": "München-West/Mitte", "FPÖ": 0.3400919, "ÖVP": 0, "SPÖ": 0.1558346, "NEOS": 0.2832466, "Grüne": 0.0597856, "KPÖ": 0.0283944, "FDP": 0.0584562, "FW": 0.0114649, "OTH": 0.0627259},
+{"name": "München-Land", "FPÖ": 0.4153408, "ÖVP": 0.1079308, "SPÖ": 0.1281678, "NEOS": 0.1888789, "Grüne": 0.0395104, "KPÖ": 0.0246422, "FDP": 0.0610077, "FW": 0.0200665, "OTH": 0.014455},
+{"name": "Rosenheim", "FPÖ": 0.4025779, "ÖVP": 0.1801265, "SPÖ": 0.0876025, "NEOS": 0.1240215, "Grüne": 0.0452777, "KPÖ": 0.0297054, "FDP": 0.045908, "FW": 0.0463928, "OTH": 0.0383876},
+{"name": "Bad Tölz-Wolfratshausen – Miesbach", "FPÖ": 0.4461743, "ÖVP": 0.1586611, "SPÖ": 0.0740419, "NEOS": 0.1423142, "Grüne": 0.0317322, "KPÖ": 0.0261848, "FDP": 0.0510434, "FW": 0.0429238, "OTH": 0.0269243},
+{"name": "Starnberg – Landsberg am Lech", "FPÖ": 0.4107344, "ÖVP": 0.1235075, "SPÖ": 0.1235075, "NEOS": 0.1598896, "Grüne": 0.0325524, "KPÖ": 0.0255508, "FDP": 0.0559321, "FW": 0.0261992, "OTH": 0.0421266},
+{"name": "Traunstein", "FPÖ": 0.4459651, "ÖVP": 0.1711593, "SPÖ": 0.1150571, "NEOS": 0.082727, "Grüne": 0.0380354, "KPÖ": 0.0325153, "FDP": 0.0325633, "FW": 0.062009, "OTH": 0.0199686},
+{"name": "Weilheim", "FPÖ": 0.4492955, "ÖVP": 0.1520541, "SPÖ": 0.0922135, "NEOS": 0.1245863, "Grüne": 0.0392398, "KPÖ": 0.0274856, "FDP": 0.0462675, "FW": 0.0433518, "OTH": 0.0255059},
+{"name": "Deggendorf", "FPÖ": 0.4260261, "ÖVP": 0.2646675, "SPÖ": 0.0885505, "NEOS": 0.0472269, "Grüne": 0.0226296, "KPÖ": 0.0289481, "FDP": 0.0311833, "FW": 0.0769936, "OTH": 0.0137745},
+{"name": "Landshut", "FPÖ": 0.3625545, "ÖVP": 0.2152005, "SPÖ": 0.0964692, "NEOS": 0.0879884, "Grüne": 0.0381636, "KPÖ": 0.0310172, "FDP": 0.0395137, "FW": 0.09835, "OTH": 0.0307429},
+{"name": "Passau", "FPÖ": 0.4006112, "ÖVP": 0.2307442, "SPÖ": 0.1374646, "NEOS": 0.0510583, "Grüne": 0.0284748, "KPÖ": 0.0333851, "FDP": 0.032153, "FW": 0.0625433, "OTH": 0.0235654},
+{"name": "Rottal-Inn", "FPÖ": 0.3812454, "ÖVP": 0.252343, "SPÖ": 0.0764676, "NEOS": 0.0589893, "Grüne": 0.0316794, "KPÖ": 0.0317324, "FDP": 0.0327735, "FW": 0.1151064, "OTH": 0.0196631},
+{"name": "Straubing", "FPÖ": 0.4454194, "ÖVP": 0.2501275, "SPÖ": 0.0760003, "NEOS": 0.0490635, "Grüne": 0.0298229, "KPÖ": 0.0281292, "FDP": 0.0291695, "FW": 0.0759131, "OTH": 0.0163545},
+{"name": "Amberg", "FPÖ": 0.4335751, "ÖVP": 0.2065571, "SPÖ": 0.1062016, "NEOS": 0.0652799, "Grüne": 0.038973, "KPÖ": 0.0272032, "FDP": 0.0320842, "FW": 0.0608961, "OTH": 0.0292298},
+{"name": "Regensburg", "FPÖ": 0.3785774, "ÖVP": 0.176933, "SPÖ": 0.1284989, "NEOS": 0.1294873, "Grüne": 0.0454688, "KPÖ": 0.0290879, "FDP": 0.0346051, "FW": 0.0486764, "OTH": 0.0286651},
+{"name": "Schwandorf", "FPÖ": 0.40617, "ÖVP": 0.2598718, "SPÖ": 0.1337859, "NEOS": 0.039462, "Grüne": 0.0259872, "KPÖ": 0.0238734, "FDP": 0.0257013, "FW": 0.0755234, "OTH": 0.0096249},
+{"name": "Weiden", "FPÖ": 0.4283339, "ÖVP": 0.2264754, "SPÖ": 0.1181611, "NEOS": 0.0482491, "Grüne": 0.0403717, "KPÖ": 0.0253592, "FDP": 0.0301187, "FW": 0.0592988, "OTH": 0.0236322},
+{"name": "Bamberg", "FPÖ": 0.3810928, "ÖVP": 0.180874, "SPÖ": 0.1412171, "NEOS": 0.1296102, "Grüne": 0.0493293, "KPÖ": 0.0283682, "FDP": 0.0380202, "FW": 0.0340778, "OTH": 0.0174103},
+{"name": "Bayreuth", "FPÖ": 0.4305305, "ÖVP": 0.1818871, "SPÖ": 0.1383503, "NEOS": 0.0793337, "Grüne": 0.0445043, "KPÖ": 0.0286958, "FDP": 0.036092, "FW": 0.0431917, "OTH": 0.0174147},
+{"name": "Coburg", "FPÖ": 0.4151061, "ÖVP": 0.2070577, "SPÖ": 0.1426618, "NEOS": 0.0842101, "Grüne": 0.0386376, "KPÖ": 0.033316, "FDP": 0.0319212, "FW": 0.039164, "OTH": 0.0079257},
+{"name": "Hof", "FPÖ": 0.3914458, "ÖVP": 0.2306042, "SPÖ": 0.1724687, "NEOS": 0.0484463, "Grüne": 0.0436016, "KPÖ": 0.034711, "FDP": 0.0302766, "FW": 0.0358497, "OTH": 0.012596},
+{"name": "Kulmbach", "FPÖ": 0.4782695, "ÖVP": 0.2114863, "SPÖ": 0.0911914, "NEOS": 0.064028, "Grüne": 0.0368646, "KPÖ": 0.0287318, "FDP": 0.0312887, "FW": 0.0494086, "OTH": 0.0087311},
+{"name": "Ansbach", "FPÖ": 0.4033091, "ÖVP": 0.2045491, "SPÖ": 0.1273608, "NEOS": 0.0868369, "Grüne": 0.0453482, "KPÖ": 0.0350081, "FDP": 0.0322191, "FW": 0.0451068, "OTH": 0.0202619},
+{"name": "Erlangen", "FPÖ": 0.3507128, "ÖVP": 0.1367682, "SPÖ": 0.1690064, "NEOS": 0.1777987, "Grüne": 0.0547073, "KPÖ": 0.0288407, "FDP": 0.0416057, "FW": 0.0249296, "OTH": 0.0156307},
+{"name": "Fürth", "FPÖ": 0.3616474, "ÖVP": 0.1788898, "SPÖ": 0.1721209, "NEOS": 0.1053999, "Grüne": 0.0589853, "KPÖ": 0.034329, "FDP": 0.0376874, "FW": 0.0277331, "OTH": 0.0232073},
+{"name": "Nürnberg-Nord", "FPÖ": 0.2903326, "ÖVP": 0.115364, "SPÖ": 0.1711232, "NEOS": 0.2076551, "Grüne": 0.0942139, "KPÖ": 0.0357462, "FDP": 0.0416422, "FW": 0.0112364, "OTH": 0.0326865},
+{"name": "Nürnberg-Süd", "FPÖ": 0.3445859, "ÖVP": 0.1914366, "SPÖ": 0.1703786, "NEOS": 0.1033758, "Grüne": 0.0765746, "KPÖ": 0.0425261, "FDP": 0.0342464, "FW": 0.0167752, "OTH": 0.0201008},
+{"name": "Roth", "FPÖ": 0.4164031, "ÖVP": 0.1640376, "SPÖ": 0.1261828, "NEOS": 0.1193883, "Grüne": 0.0495025, "KPÖ": 0.0289089, "FDP": 0.0369506, "FW": 0.035331, "OTH": 0.0232953},
+{"name": "Aschaffenburg", "FPÖ": 0.4220358, "ÖVP": 0.1772936, "SPÖ": 0.1185169, "NEOS": 0.1136991, "Grüne": 0.0462505, "KPÖ": 0.0310909, "FDP": 0.0425917, "FW": 0.0215421, "OTH": 0.0269795},
+{"name": "Bad Kissingen", "FPÖ": 0.5418793, "ÖVP": 0, "SPÖ": 0.1555891, "NEOS": 0.0654547, "Grüne": 0.0622356, "KPÖ": 0.0313909, "FDP": 0.0385581, "FW": 0.0480216, "OTH": 0.0568705},
+{"name": "Main-Spessart", "FPÖ": 0.4413966, "ÖVP": 0.1755886, "SPÖ": 0.1523061, "NEOS": 0.0805185, "Grüne": 0.0397742, "KPÖ": 0.0304597, "FDP": 0.0345183, "FW": 0.036707, "OTH": 0.0087309},
+{"name": "Schweinfurt", "FPÖ": 0.4196884, "ÖVP": 0.201141, "SPÖ": 0.1295812, "NEOS": 0.0763949, "Grüne": 0.0454501, "KPÖ": 0.0313292, "FDP": 0.0345788, "FW": 0.0376608, "OTH": 0.0241756},
+{"name": "Würzburg", "FPÖ": 0.3824409, "ÖVP": 0.1271543, "SPÖ": 0.1349791, "NEOS": 0.1868189, "Grüne": 0.0498836, "KPÖ": 0.0270573, "FDP": 0.0426482, "FW": 0.0226087, "OTH": 0.026409},
+{"name": "Augsburg-Stadt", "FPÖ": 0.2995296, "ÖVP": 0.1666194, "SPÖ": 0.1357996, "NEOS": 0.1984023, "Grüne": 0.0712707, "KPÖ": 0.0379009, "FDP": 0.0396591, "FW": 0.0219248, "OTH": 0.0288935},
+{"name": "Augsburg-Land", "FPÖ": 0.4294858, "ÖVP": 0.1824108, "SPÖ": 0.1225724, "NEOS": 0.0887926, "Grüne": 0.0376403, "KPÖ": 0.0282837, "FDP": 0.0385457, "FW": 0.0452449, "OTH": 0.0270238},
+{"name": "Donau-Ries", "FPÖ": 0.4400299, "ÖVP": 0.2097704, "SPÖ": 0.1180568, "NEOS": 0.0565892, "Grüne": 0.033173, "KPÖ": 0.0296618, "FDP": 0.0363933, "FW": 0.0616905, "OTH": 0.0146351},
+{"name": "Neu-Ulm", "FPÖ": 0.403736, "ÖVP": 0.2251422, "SPÖ": 0.1006965, "NEOS": 0.0797972, "Grüne": 0.0427485, "KPÖ": 0.0348788, "FDP": 0.0392669, "FW": 0.0357351, "OTH": 0.0379987},
+{"name": "Memmingen – Unterallgäu", "FPÖ": 0.4320207, "ÖVP": 0.2239011, "SPÖ": 0.0937031, "NEOS": 0.0798942, "Grüne": 0.0463584, "KPÖ": 0.0297405, "FDP": 0.0406542, "FW": 0.0537277, "OTH": 0},
+{"name": "Oberallgäu", "FPÖ": 0.3686696, "ÖVP": 0.1673039, "SPÖ": 0.0841529, "NEOS": 0.1242256, "Grüne": 0.039071, "KPÖ": 0.0330405, "FDP": 0.0431035, "FW": 0.051271, "OTH": 0.089162},
+{"name": "Ostallgäu", "FPÖ": 0.4445183, "ÖVP": 0.1905079, "SPÖ": 0.0976963, "NEOS": 0.1016042, "Grüne": 0.0439634, "KPÖ": 0.0306072, "FDP": 0.0372188, "FW": 0.0538838, "OTH": 0},
+{"name": "Stuttgart I", "FPÖ": 0.2718702, "ÖVP": 0.0826178, "SPÖ": 0.1508255, "NEOS": 0.2719662, "Grüne": 0.0845391, "KPÖ": 0.0313984, "FDP": 0.0698641, "FW": 0.0052165, "OTH": 0.0317022},
+{"name": "Stuttgart II", "FPÖ": 0.2866392, "ÖVP": 0.1376623, "SPÖ": 0.1499199, "NEOS": 0.200836, "Grüne": 0.0848603, "KPÖ": 0.0455874, "FDP": 0.0548775, "FW": 0.0066162, "OTH": 0.0330012},
+{"name": "Böblingen", "FPÖ": 0.3608211, "ÖVP": 0.1654166, "SPÖ": 0.1625146, "NEOS": 0.1305921, "Grüne": 0.0474001, "KPÖ": 0.0386909, "FDP": 0.0678548, "FW": 0.0141342, "OTH": 0.0125755},
+{"name": "Esslingen", "FPÖ": 0.3556409, "ÖVP": 0.1509071, "SPÖ": 0.155713, "NEOS": 0.1489847, "Grüne": 0.0634386, "KPÖ": 0.0369619, "FDP": 0.0551708, "FW": 0.0129981, "OTH": 0.020185},
+{"name": "Nürtingen", "FPÖ": 0.3637695, "ÖVP": 0.1717533, "SPÖ": 0.1582446, "NEOS": 0.1389465, "Grüne": 0.0521049, "KPÖ": 0.0359266, "FDP": 0.0643696, "FW": 0.0148851, "OTH": 0},
+{"name": "Göppingen", "FPÖ": 0.3563086, "ÖVP": 0.2170505, "SPÖ": 0.1632681, "NEOS": 0.0893172, "Grüne": 0.0460992, "KPÖ": 0.0411923, "FDP": 0.0532082, "FW": 0.0143478, "OTH": 0.019208},
+{"name": "Waiblingen", "FPÖ": 0.3636782, "ÖVP": 0.1746041, "SPÖ": 0.1659221, "NEOS": 0.1196183, "Grüne": 0.0511272, "KPÖ": 0.0367046, "FDP": 0.0654204, "FW": 0.0123138, "OTH": 0.0106113},
+{"name": "Ludwigsburg", "FPÖ": 0.3488433, "ÖVP": 0.1615192, "SPÖ": 0.1452717, "NEOS": 0.1529176, "Grüne": 0.0592556, "KPÖ": 0.0377009, "FDP": 0.0611744, "FW": 0.0113355, "OTH": 0.0219819},
+{"name": "Neckar-Zaber", "FPÖ": 0.374026, "ÖVP": 0.1855854, "SPÖ": 0.142758, "NEOS": 0.1103995, "Grüne": 0.0485377, "KPÖ": 0.0362068, "FDP": 0.0600068, "FW": 0.0139281, "OTH": 0.0285516},
+{"name": "Heilbronn", "FPÖ": 0.3345042, "ÖVP": 0.2398873, "SPÖ": 0.1481376, "NEOS": 0.0821925, "Grüne": 0.0573436, "KPÖ": 0.0415335, "FDP": 0.0594214, "FW": 0.0130867, "OTH": 0.0238932},
+{"name": "Schwäbisch Hall – Hohenlohe", "FPÖ": 0.3484299, "ÖVP": 0.229734, "SPÖ": 0.1426265, "NEOS": 0.0957225, "Grüne": 0.0459468, "KPÖ": 0.0411826, "FDP": 0.0547482, "FW": 0.0148072, "OTH": 0.0268023},
+{"name": "Backnang – Schwäbisch Gmünd", "FPÖ": 0.3492541, "ÖVP": 0.2232936, "SPÖ": 0.1564964, "NEOS": 0.1021043, "Grüne": 0.0496208, "KPÖ": 0.0412223, "FDP": 0.0513897, "FW": 0.0113508, "OTH": 0.0152679},
+{"name": "Aalen – Heidenheim", "FPÖ": 0.3961833, "ÖVP": 0.2210588, "SPÖ": 0.134932, "NEOS": 0.0794281, "Grüne": 0.0478482, "KPÖ": 0.0420554, "FDP": 0.0466107, "FW": 0.0156151, "OTH": 0.0162684},
+{"name": "Karlsruhe-Stadt", "FPÖ": 0.2268878, "ÖVP": 0.1311546, "SPÖ": 0.1464719, "NEOS": 0.2929437, "Grüne": 0.0765866, "KPÖ": 0.035488, "FDP": 0.0493824, "FW": 0.0056637, "OTH": 0.0354213},
+{"name": "Karlsruhe-Land", "FPÖ": 0.3768868, "ÖVP": 0.1778675, "SPÖ": 0.1442169, "NEOS": 0.124988, "Grüne": 0.0490337, "KPÖ": 0.0369105, "FDP": 0.0532946, "FW": 0.0127659, "OTH": 0.0240361},
+{"name": "Rastatt", "FPÖ": 0.3744619, "ÖVP": 0.214254, "SPÖ": 0.1457313, "NEOS": 0.1080921, "Grüne": 0.0453601, "KPÖ": 0.0394145, "FDP": 0.0475754, "FW": 0.0154596, "OTH": 0.0096511},
+{"name": "Heidelberg", "FPÖ": 0.2785232, "ÖVP": 0.1144616, "SPÖ": 0.1516616, "NEOS": 0.2642155, "Grüne": 0.0677231, "KPÖ": 0.0326732, "FDP": 0.054101, "FW": 0.0070714, "OTH": 0.0295692},
+{"name": "Mannheim", "FPÖ": 0.2359906, "ÖVP": 0.1710215, "SPÖ": 0.2149712, "NEOS": 0.1729324, "Grüne": 0.0764342, "KPÖ": 0.0446813, "FDP": 0.049184, "FW": 0.0070774, "OTH": 0.0277074},
+{"name": "Odenwald – Tauber", "FPÖ": 0.4109728, "ÖVP": 0.2208499, "SPÖ": 0.1353906, "NEOS": 0.0748969, "Grüne": 0.0432098, "KPÖ": 0.0398508, "FDP": 0.0459863, "FW": 0.0182807, "OTH": 0.0105624},
+{"name": "Rhein-Neckar", "FPÖ": 0.3314061, "ÖVP": 0.1965315, "SPÖ": 0.1965315, "NEOS": 0.1059729, "Grüne": 0.0491329, "KPÖ": 0.0385485, "FDP": 0.0543412, "FW": 0.0130844, "OTH": 0.0144508},
+{"name": "Bruchsal – Schwetzingen", "FPÖ": 0.3492967, "ÖVP": 0.2148029, "SPÖ": 0.1577157, "NEOS": 0.1035312, "Grüne": 0.0503142, "KPÖ": 0.0418674, "FDP": 0.0507487, "FW": 0.0152743, "OTH": 0.0164489},
+{"name": "Pforzheim", "FPÖ": 0.3488108, "ÖVP": 0.2529113, "SPÖ": 0.1983803, "NEOS": 0, "Grüne": 0.0601722, "KPÖ": 0.0413862, "FDP": 0.0584104, "FW": 0.0107828, "OTH": 0.0291459},
+{"name": "Calw", "FPÖ": 0.3758237, "ÖVP": 0.2332035, "SPÖ": 0.1243109, "NEOS": 0.0780557, "Grüne": 0.0375824, "KPÖ": 0.0384748, "FDP": 0.0572371, "FW": 0.0158022, "OTH": 0.0395097},
+{"name": "Freiburg", "FPÖ": 0.2349956, "ÖVP": 0.0987941, "SPÖ": 0.150589, "NEOS": 0.3117289, "Grüne": 0.0959166, "KPÖ": 0.0335515, "FDP": 0.040691, "FW": 0.0068768, "OTH": 0.0268566},
+{"name": "Lörrach – Müllheim", "FPÖ": 0.3232991, "ÖVP": 0.1713875, "SPÖ": 0.1684661, "NEOS": 0.1528854, "Grüne": 0.0594013, "KPÖ": 0.0433367, "FDP": 0.047734, "FW": 0.018883, "OTH": 0.0146069},
+{"name": "Emmendingen – Lahr", "FPÖ": 0.3573103, "ÖVP": 0.1834837, "SPÖ": 0.2143862, "NEOS": 0.097536, "Grüne": 0.0453881, "KPÖ": 0.0387878, "FDP": 0.0452552, "FW": 0.0178528, "OTH": 0},
+{"name": "Offenburg", "FPÖ": 0.3724264, "ÖVP": 0.2018122, "SPÖ": 0.126742, "NEOS": 0.1199174, "Grüne": 0.0526467, "KPÖ": 0.043853, "FDP": 0.0513239, "FW": 0.0186043, "OTH": 0.0126742},
+{"name": "Rottweil – Tuttlingen", "FPÖ": 0.3756755, "ÖVP": 0.2655804, "SPÖ": 0.1071979, "NEOS": 0.0753282, "Grüne": 0.0434586, "KPÖ": 0.0435067, "FDP": 0.0586742, "FW": 0.0141609, "OTH": 0.0164177},
+{"name": "Schwarzwald-Baar", "FPÖ": 0.4005186, "ÖVP": 0.212095, "SPÖ": 0.141081, "NEOS": 0.0729076, "Grüne": 0.038821, "KPÖ": 0.0421217, "FDP": 0.0499759, "FW": 0.0150204, "OTH": 0.0274587},
+{"name": "Konstanz", "FPÖ": 0.3601541, "ÖVP": 0.166225, "SPÖ": 0.1490293, "NEOS": 0.1432974, "Grüne": 0.0563636, "KPÖ": 0.0388263, "FDP": 0.0551995, "FW": 0.0108432, "OTH": 0.0200616},
+{"name": "Waldshut", "FPÖ": 0.3624523, "ÖVP": 0.1778612, "SPÖ": 0.179784, "NEOS": 0.1115238, "Grüne": 0.0451864, "KPÖ": 0.0380717, "FDP": 0.0479274, "FW": 0.0160422, "OTH": 0.0211511},
+{"name": "Reutlingen", "FPÖ": 0.3702068, "ÖVP": 0.190392, "SPÖ": 0.1317359, "NEOS": 0.1221202, "Grüne": 0.0538483, "KPÖ": 0.043886, "FDP": 0.0619271, "FW": 0.0124216, "OTH": 0.0134621},
+{"name": "Tübingen", "FPÖ": 0.3045193, "ÖVP": 0.1498581, "SPÖ": 0.1248817, "NEOS": 0.2372753, "Grüne": 0.059559, "KPÖ": 0.0381524, "FDP": 0.0480589, "FW": 0.009837, "OTH": 0.0278582},
+{"name": "Ulm", "FPÖ": 0.3702594, "ÖVP": 0.1765412, "SPÖ": 0.1278731, "NEOS": 0.1479129, "Grüne": 0.0477138, "KPÖ": 0.0371003, "FDP": 0.0491868, "FW": 0.0128757, "OTH": 0.0305369},
+{"name": "Biberach", "FPÖ": 0.3941897, "ÖVP": 0.2158887, "SPÖ": 0.1224012, "NEOS": 0.0992703, "Grüne": 0.036624, "KPÖ": 0.0366685, "FDP": 0.0489317, "FW": 0.0180762, "OTH": 0.0279499},
+{"name": "Bodensee", "FPÖ": 0.3788699, "ÖVP": 0.1932236, "SPÖ": 0.1449177, "NEOS": 0.1202912, "Grüne": 0.0397813, "KPÖ": 0.0382286, "FDP": 0.054385, "FW": 0.0132534, "OTH": 0.0170491},
+{"name": "Ravensburg", "FPÖ": 0.3773609, "ÖVP": 0.1813673, "SPÖ": 0.1072602, "NEOS": 0.1482141, "Grüne": 0.0614308, "KPÖ": 0.0402591, "FDP": 0.0528674, "FW": 0.0166137, "OTH": 0.0146264},
+{"name": "Zollernalb – Sigmaringen", "FPÖ": 0.3558371, "ÖVP": 0.251292, "SPÖ": 0.1879894, "NEOS": 0.0508339, "Grüne": 0.0383652, "KPÖ": 0.0403796, "FDP": 0.0524007, "FW": 0.0133109, "OTH": 0.0095913},
+{"name": "Saarbrücken", "FPÖ": 0.2344517, "ÖVP": 0.1947462, "SPÖ": 0.3062998, "NEOS": 0.0699574, "Grüne": 0.0803564, "KPÖ": 0.0596152, "FDP": 0.0414097, "FW": 0.0093823, "OTH": 0.0037815},
+{"name": "Saarlouis", "FPÖ": 0.2999369, "ÖVP": 0.2065603, "SPÖ": 0.266925, "NEOS": 0.0452735, "Grüne": 0.0631943, "KPÖ": 0.063593, "FDP": 0.0419704, "FW": 0.0125466, "OTH": 0},
+{"name": "St. Wendel", "FPÖ": 0.3259512, "ÖVP": 0.1971091, "SPÖ": 0.2749913, "NEOS": 0.0365373, "Grüne": 0.0557675, "KPÖ": 0.0548369, "FDP": 0.0390217, "FW": 0.015785, "OTH": 0},
+{"name": "Homburg", "FPÖ": 0.2676918, "ÖVP": 0.2237138, "SPÖ": 0.2915928, "NEOS": 0.0420658, "Grüne": 0.0630988, "KPÖ": 0.0549247, "FDP": 0.0405641, "FW": 0.0163482, "OTH": 0}]};
+
+const CONSTITUENCY_SEATS = {
+"Flensburg – Schleswig": 1,
+"Nordfriesland – Dithmarschen Nord": 1,
+"Steinburg – Dithmarschen Süd": 1,
+"Rendsburg-Eckernförde": 1,
+"Kiel": 1,
+"Plön – Neumünster": 1,
+"Pinneberg": 1,
+"Segeberg – Stormarn-Mitte": 1,
+"Ostholstein – Stormarn-Nord": 1,
+"Herzogtum Lauenburg – Stormarn-Süd": 1,
+"Lübeck": 1,
+"Schwerin – Ludwigslust-Parchim I – Nordwestmecklenburg I": 1,
+"Ludwigslust-Parchim II – Nordwestmecklenburg II – Landkreis Rostock I": 1,
+"Rostock – Landkreis Rostock II": 1,
+"Vorpommern-Rügen – Vorpommern-Greifswald I": 1,
+"Mecklenburgische Seenplatte I – Vorpommern-Greifswald II": 1,
+"Mecklenburgische Seenplatte II – Landkreis Rostock III": 1,
+"Hamburg-Mitte": 1,
+"Hamburg-Altona": 1,
+"Hamburg-Eimsbüttel": 1,
+"Hamburg-Nord": 1,
+"Hamburg-Wandsbek": 1,
+"Hamburg-Bergedorf – Harburg": 1,
+"Aurich – Emden": 1,
+"Unterems": 1,
+"Friesland – Wilhelmshaven – Wittmund": 1,
+"Oldenburg – Ammerland": 1,
+"Delmenhorst – Wesermarsch – Oldenburg-Land": 1,
+"Cuxhaven – Stade II": 1,
+"Stade I – Rotenburg II": 1,
+"Mittelems": 1,
+"Cloppenburg – Vechta": 1,
+"Diepholz – Nienburg I": 1,
+"Osterholz – Verden": 1,
+"Rotenburg I – Heidekreis": 1,
+"Harburg": 1,
+"Lüchow-Dannenberg – Lüneburg": 1,
+"Osnabrück-Land": 1,
+"Stadt Osnabrück": 1,
+"Nienburg II – Schaumburg": 1,
+"Stadt Hannover I": 1,
+"Stadt Hannover II": 1,
+"Hannover-Land I": 1,
+"Celle – Uelzen": 1,
+"Gifhorn – Peine": 1,
+"Hameln-Pyrmont – Holzminden": 1,
+"Hannover-Land II": 1,
+"Hildesheim": 1,
+"Salzgitter – Wolfenbüttel": 1,
+"Braunschweig": 1,
+"Helmstedt – Wolfsburg": 1,
+"Goslar – Northeim – Göttingen II": 1,
+"Göttingen I": 1,
+"Bremen I": 1,
+"Bremen II – Bremerhaven": 1,
+"Prignitz – Ostprignitz-Ruppin – Havelland I": 1,
+"Uckermark – Barnim I": 1,
+"Oberhavel – Havelland II": 1,
+"Märkisch-Oderland – Barnim II": 1,
+"Brandenburg an der Havel – Potsdam-Mittelmark I – Havelland III – Teltow-Fläming I": 1,
+"Potsdam – Potsdam-Mittelmark II – Teltow-Fläming II": 1,
+"Dahme-Spreewald – Teltow-Fläming III": 1,
+"Frankfurt (Oder) – Oder-Spree": 1,
+"Cottbus – Spree-Neiße": 1,
+"Elbe-Elster – Oberspreewald-Lausitz": 1,
+"Altmark – Jerichower Land": 1,
+"Börde – Salzlandkreis": 1,
+"Harz": 1,
+"Magdeburg": 1,
+"Anhalt – Dessau – Wittenberg": 1,
+"Halle": 1,
+"Burgenland – Saalekreis": 1,
+"Mansfeld": 1,
+"Berlin-Mitte": 1,
+"Berlin-Pankow": 1,
+"Berlin-Reinickendorf": 1,
+"Berlin-Spandau – Charlottenburg Nord": 1,
+"Berlin-Steglitz-Zehlendorf": 1,
+"Berlin-Charlottenburg-Wilmersdorf": 1,
+"Berlin-Tempelhof-Schöneberg": 1,
+"Berlin-Neukölln": 1,
+"Berlin-Friedrichshain-Kreuzberg – Prenzlauer Berg Ost": 1,
+"Berlin-Treptow-Köpenick": 1,
+"Berlin-Marzahn-Hellersdorf": 1,
+"Berlin-Lichtenberg": 1,
+"Aachen I": 1,
+"Aachen II": 1,
+"Heinsberg": 1,
+"Düren": 1,
+"Rhein-Erft-Kreis I": 1,
+"Euskirchen – Rhein-Erft-Kreis II": 1,
+"Köln I": 1,
+"Köln II": 1,
+"Köln III": 1,
+"Bonn": 1,
+"Rhein-Sieg-Kreis I": 1,
+"Rhein-Sieg-Kreis II": 1,
+"Oberbergischer Kreis": 1,
+"Rheinisch-Bergischer Kreis": 1,
+"Leverkusen – Köln IV": 1,
+"Wuppertal I": 1,
+"Solingen – Remscheid – Wuppertal II": 1,
+"Mettmann I": 1,
+"Mettmann II": 1,
+"Düsseldorf I": 1,
+"Düsseldorf II": 1,
+"Neuss I": 1,
+"Mönchengladbach": 1,
+"Krefeld I – Neuss II": 1,
+"Viersen": 1,
+"Kleve": 1,
+"Wesel I": 1,
+"Krefeld II – Wesel II": 1,
+"Duisburg I": 1,
+"Duisburg II": 1,
+"Oberhausen – Wesel III": 1,
+"Mülheim – Essen I": 1,
+"Essen II": 1,
+"Essen III": 1,
+"Recklinghausen I": 1,
+"Recklinghausen II": 1,
+"Gelsenkirchen": 1,
+"Steinfurt I – Borken I": 1,
+"Bottrop – Recklinghausen III": 1,
+"Borken II": 1,
+"Coesfeld – Steinfurt II": 1,
+"Steinfurt III": 1,
+"Münster": 1,
+"Warendorf": 1,
+"Gütersloh I": 1,
+"Bielefeld – Gütersloh II": 1,
+"Herford – Minden-Lübbecke II": 1,
+"Minden-Lübbecke I": 1,
+"Lippe I": 1,
+"Höxter – Gütersloh III – Lippe II": 1,
+"Paderborn": 1,
+"Hagen – Ennepe-Ruhr-Kreis I": 1,
+"Ennepe-Ruhr-Kreis II": 1,
+"Bochum I": 1,
+"Herne – Bochum II": 1,
+"Dortmund I": 1,
+"Dortmund II": 1,
+"Unna I": 1,
+"Hamm – Unna II": 1,
+"Soest": 1,
+"Hochsauerlandkreis": 1,
+"Siegen-Wittgenstein": 1,
+"Olpe – Märkischer Kreis I": 1,
+"Märkischer Kreis II": 1,
+"Nordsachsen": 1,
+"Leipzig I": 1,
+"Leipzig II": 1,
+"Leipzig-Land": 1,
+"Meißen": 1,
+"Bautzen I": 1,
+"Görlitz": 1,
+"Sächsische Schweiz-Osterzgebirge": 1,
+"Dresden I": 1,
+"Dresden II – Bautzen II": 1,
+"Mittelsachsen": 1,
+"Chemnitz": 1,
+"Chemnitzer Umland – Erzgebirgskreis II": 1,
+"Erzgebirgskreis I": 1,
+"Zwickau": 1,
+"Vogtlandkreis": 1,
+"Waldeck": 1,
+"Kassel": 1,
+"Werra-Meißner – Hersfeld-Rotenburg": 1,
+"Schwalm-Eder": 1,
+"Marburg": 1,
+"Lahn-Dill": 1,
+"Gießen": 1,
+"Fulda": 1,
+"Main-Kinzig – Wetterau II – Schotten": 1,
+"Hochtaunus": 1,
+"Wetterau I": 1,
+"Rheingau-Taunus – Limburg": 1,
+"Wiesbaden": 1,
+"Hanau": 1,
+"Main-Taunus": 1,
+"Frankfurt am Main I": 1,
+"Frankfurt am Main II": 1,
+"Groß-Gerau": 1,
+"Offenbach": 1,
+"Darmstadt": 1,
+"Odenwald": 1,
+"Bergstraße": 1,
+"Eichsfeld – Nordhausen – Kyffhäuserkreis": 1,
+"Eisenach – Wartburgkreis – Unstrut-Hainich-Kreis": 1,
+"Jena – Sömmerda – Weimarer Land I": 1,
+"Gotha – Ilm-Kreis": 1,
+"Erfurt – Weimar – Weimarer Land II": 1,
+"Gera – Greiz – Altenburger Land": 1,
+"Saalfeld-Rudolstadt – Saale-Holzland-Kreis – Saale-Orla-Kreis": 1,
+"Suhl – Schmalkalden-Meiningen – Hildburghausen – Sonneberg": 1,
+"Neuwied": 1,
+"Ahrweiler": 1,
+"Koblenz": 1,
+"Mosel/Rhein-Hunsrück": 1,
+"Kreuznach": 1,
+"Bitburg": 1,
+"Trier": 1,
+"Montabaur": 1,
+"Mainz": 1,
+"Worms": 1,
+"Ludwigshafen/Frankenthal": 1,
+"Neustadt – Speyer": 1,
+"Kaiserslautern": 1,
+"Pirmasens": 1,
+"Südpfalz": 1,
+"Altötting": 1,
+"Erding – Ebersberg": 1,
+"Freising": 1,
+"Fürstenfeldbruck": 1,
+"Ingolstadt": 1,
+"München-Nord": 1,
+"München-Ost": 1,
+"München-Süd": 1,
+"München-West/Mitte": 1,
+"München-Land": 1,
+"Rosenheim": 1,
+"Bad Tölz-Wolfratshausen – Miesbach": 1,
+"Starnberg – Landsberg am Lech": 1,
+"Traunstein": 1,
+"Weilheim": 1,
+"Deggendorf": 1,
+"Landshut": 1,
+"Passau": 1,
+"Rottal-Inn": 1,
+"Straubing": 1,
+"Amberg": 1,
+"Regensburg": 1,
+"Schwandorf": 1,
+"Weiden": 1,
+"Bamberg": 1,
+"Bayreuth": 1,
+"Coburg": 1,
+"Hof": 1,
+"Kulmbach": 1,
+"Ansbach": 1,
+"Erlangen": 1,
+"Fürth": 1,
+"Nürnberg-Nord": 1,
+"Nürnberg-Süd": 1,
+"Roth": 1,
+"Aschaffenburg": 1,
+"Bad Kissingen": 1,
+"Main-Spessart": 1,
+"Schweinfurt": 1,
+"Würzburg": 1,
+"Augsburg-Stadt": 1,
+"Augsburg-Land": 1,
+"Donau-Ries": 1,
+"Neu-Ulm": 1,
+"Memmingen – Unterallgäu": 1,
+"Oberallgäu": 1,
+"Ostallgäu": 1,
+"Stuttgart I": 1,
+"Stuttgart II": 1,
+"Böblingen": 1,
+"Esslingen": 1,
+"Nürtingen": 1,
+"Göppingen": 1,
+"Waiblingen": 1,
+"Ludwigsburg": 1,
+"Neckar-Zaber": 1,
+"Heilbronn": 1,
+"Schwäbisch Hall – Hohenlohe": 1,
+"Backnang – Schwäbisch Gmünd": 1,
+"Aalen – Heidenheim": 1,
+"Karlsruhe-Stadt": 1,
+"Karlsruhe-Land": 1,
+"Rastatt": 1,
+"Heidelberg": 1,
+"Mannheim": 1,
+"Odenwald – Tauber": 1,
+"Rhein-Neckar": 1,
+"Bruchsal – Schwetzingen": 1,
+"Pforzheim": 1,
+"Calw": 1,
+"Freiburg": 1,
+"Lörrach – Müllheim": 1,
+"Emmendingen – Lahr": 1,
+"Offenburg": 1,
+"Rottweil – Tuttlingen": 1,
+"Schwarzwald-Baar": 1,
+"Konstanz": 1,
+"Waldshut": 1,
+"Reutlingen": 1,
+"Tübingen": 1,
+"Ulm": 1,
+"Biberach": 1,
+"Bodensee": 1,
+"Ravensburg": 1,
+"Zollernalb – Sigmaringen": 1,
+"Saarbrücken": 1,
+"Saarlouis": 1,
+"St. Wendel": 1,
+"Homburg": 1
+};
+
+// 👇 incumbent party for each constituency
+const CONSTITUENCY_INCUMBENTS = {
+"Flensburg – Schleswig": "FPÖ",
+"Nordfriesland – Dithmarschen Nord": "FPÖ",
+"Steinburg – Dithmarschen Süd": "FPÖ",
+"Rendsburg-Eckernförde": "FPÖ",
+"Kiel": "NEOS",
+"Plön – Neumünster": "FPÖ",
+"Pinneberg": "FPÖ",
+"Segeberg – Stormarn-Mitte": "FPÖ",
+"Ostholstein – Stormarn-Nord": "FPÖ",
+"Herzogtum Lauenburg – Stormarn-Süd": "FPÖ",
+"Lübeck": "SPÖ",
+"Schwerin – Ludwigslust-Parchim I – Nordwestmecklenburg I": "ÖVP",
+"Ludwigslust-Parchim II – Nordwestmecklenburg II – Landkreis Rostock I": "ÖVP",
+"Rostock – Landkreis Rostock II": "ÖVP",
+"Vorpommern-Rügen – Vorpommern-Greifswald I": "ÖVP",
+"Mecklenburgische Seenplatte I – Vorpommern-Greifswald II": "ÖVP",
+"Mecklenburgische Seenplatte II – Landkreis Rostock III": "ÖVP",
+"Hamburg-Mitte": "SPÖ",
+"Hamburg-Altona": "NEOS",
+"Hamburg-Eimsbüttel": "NEOS",
+"Hamburg-Nord": "FPÖ",
+"Hamburg-Wandsbek": "SPÖ",
+"Hamburg-Bergedorf – Harburg": "SPÖ",
+"Aurich – Emden": "SPÖ",
+"Unterems": "FPÖ",
+"Friesland – Wilhelmshaven – Wittmund": "SPÖ",
+"Oldenburg – Ammerland": "SPÖ",
+"Delmenhorst – Wesermarsch – Oldenburg-Land": "FPÖ",
+"Cuxhaven – Stade II": "FPÖ",
+"Stade I – Rotenburg II": "FPÖ",
+"Mittelems": "FPÖ",
+"Cloppenburg – Vechta": "FPÖ",
+"Diepholz – Nienburg I": "FPÖ",
+"Osterholz – Verden": "FPÖ",
+"Rotenburg I – Heidekreis": "SPÖ",
+"Harburg": "FPÖ",
+"Lüchow-Dannenberg – Lüneburg": "SPÖ",
+"Osnabrück-Land": "FPÖ",
+"Stadt Osnabrück": "FPÖ",
+"Nienburg II – Schaumburg": "SPÖ",
+"Stadt Hannover I": "SPÖ",
+"Stadt Hannover II": "SPÖ",
+"Hannover-Land I": "FPÖ",
+"Celle – Uelzen": "FPÖ",
+"Gifhorn – Peine": "SPÖ",
+"Hameln-Pyrmont – Holzminden": "SPÖ",
+"Hannover-Land II": "SPÖ",
+"Hildesheim": "SPÖ",
+"Salzgitter – Wolfenbüttel": "SPÖ",
+"Braunschweig": "SPÖ",
+"Helmstedt – Wolfsburg": "FPÖ",
+"Goslar – Northeim – Göttingen II": "SPÖ",
+"Göttingen I": "FPÖ",
+"Bremen I": "SPÖ",
+"Bremen II – Bremerhaven": "SPÖ",
+"Prignitz – Ostprignitz-Ruppin – Havelland I": "ÖVP",
+"Uckermark – Barnim I": "ÖVP",
+"Oberhavel – Havelland II": "ÖVP",
+"Märkisch-Oderland – Barnim II": "ÖVP",
+"Brandenburg an der Havel – Potsdam-Mittelmark I – Havelland III – Teltow-Fläming I": "ÖVP",
+"Potsdam – Potsdam-Mittelmark II – Teltow-Fläming II": "SPÖ",
+"Dahme-Spreewald – Teltow-Fläming III": "ÖVP",
+"Frankfurt (Oder) – Oder-Spree": "ÖVP",
+"Cottbus – Spree-Neiße": "ÖVP",
+"Elbe-Elster – Oberspreewald-Lausitz": "ÖVP",
+"Altmark – Jerichower Land": "ÖVP",
+"Börde – Salzlandkreis": "ÖVP",
+"Harz": "ÖVP",
+"Magdeburg": "ÖVP",
+"Anhalt – Dessau – Wittenberg": "ÖVP",
+"Halle": "ÖVP",
+"Burgenland – Saalekreis": "ÖVP",
+"Mansfeld": "ÖVP",
+"Berlin-Mitte": "NEOS",
+"Berlin-Pankow": "NEOS",
+"Berlin-Reinickendorf": "FPÖ",
+"Berlin-Spandau – Charlottenburg Nord": "SPÖ",
+"Berlin-Steglitz-Zehlendorf": "FPÖ",
+"Berlin-Charlottenburg-Wilmersdorf": "FPÖ",
+"Berlin-Tempelhof-Schöneberg": "NEOS",
+"Berlin-Neukölln": "Grüne",
+"Berlin-Friedrichshain-Kreuzberg – Prenzlauer Berg Ost": "Grüne",
+"Berlin-Treptow-Köpenick": "Grüne",
+"Berlin-Marzahn-Hellersdorf": "ÖVP",
+"Berlin-Lichtenberg": "Grüne",
+"Aachen I": "FPÖ",
+"Aachen II": "FPÖ",
+"Heinsberg": "FPÖ",
+"Düren": "FPÖ",
+"Rhein-Erft-Kreis I": "FPÖ",
+"Euskirchen – Rhein-Erft-Kreis II": "FPÖ",
+"Köln I": "SPÖ",
+"Köln II": "NEOS",
+"Köln III": "NEOS",
+"Bonn": "FPÖ",
+"Rhein-Sieg-Kreis I": "FPÖ",
+"Rhein-Sieg-Kreis II": "FPÖ",
+"Oberbergischer Kreis": "FPÖ",
+"Rheinisch-Bergischer Kreis": "FPÖ",
+"Leverkusen – Köln IV": "SPÖ",
+"Wuppertal I": "SPÖ",
+"Solingen – Remscheid – Wuppertal II": "FPÖ",
+"Mettmann I": "FPÖ",
+"Mettmann II": "FPÖ",
+"Düsseldorf I": "FPÖ",
+"Düsseldorf II": "FPÖ",
+"Neuss I": "FPÖ",
+"Mönchengladbach": "FPÖ",
+"Krefeld I – Neuss II": "FPÖ",
+"Viersen": "FPÖ",
+"Kleve": "FPÖ",
+"Wesel I": "FPÖ",
+"Krefeld II – Wesel II": "FPÖ",
+"Duisburg I": "SPÖ",
+"Duisburg II": "SPÖ",
+"Oberhausen – Wesel III": "SPÖ",
+"Mülheim – Essen I": "SPÖ",
+"Essen II": "SPÖ",
+"Essen III": "FPÖ",
+"Recklinghausen I": "SPÖ",
+"Recklinghausen II": "FPÖ",
+"Gelsenkirchen": "SPÖ",
+"Steinfurt I – Borken I": "FPÖ",
+"Bottrop – Recklinghausen III": "FPÖ",
+"Borken II": "FPÖ",
+"Coesfeld – Steinfurt II": "FPÖ",
+"Steinfurt III": "FPÖ",
+"Münster": "NEOS",
+"Warendorf": "FPÖ",
+"Gütersloh I": "FPÖ",
+"Bielefeld – Gütersloh II": "SPÖ",
+"Herford – Minden-Lübbecke II": "FPÖ",
+"Minden-Lübbecke I": "FPÖ",
+"Lippe I": "FPÖ",
+"Höxter – Gütersloh III – Lippe II": "FPÖ",
+"Paderborn": "FPÖ",
+"Hagen – Ennepe-Ruhr-Kreis I": "FPÖ",
+"Ennepe-Ruhr-Kreis II": "FPÖ",
+"Bochum I": "SPÖ",
+"Herne – Bochum II": "SPÖ",
+"Dortmund I": "SPÖ",
+"Dortmund II": "SPÖ",
+"Unna I": "SPÖ",
+"Hamm – Unna II": "SPÖ",
+"Soest": "FPÖ",
+"Hochsauerlandkreis": "FPÖ",
+"Siegen-Wittgenstein": "FPÖ",
+"Olpe – Märkischer Kreis I": "FPÖ",
+"Märkischer Kreis II": "FPÖ",
+"Nordsachsen": "ÖVP",
+"Leipzig I": "ÖVP",
+"Leipzig II": "Grüne",
+"Leipzig-Land": "ÖVP",
+"Meißen": "ÖVP",
+"Bautzen I": "ÖVP",
+"Görlitz": "ÖVP",
+"Sächsische Schweiz-Osterzgebirge": "ÖVP",
+"Dresden I": "ÖVP",
+"Dresden II – Bautzen II": "ÖVP",
+"Mittelsachsen": "ÖVP",
+"Chemnitz": "ÖVP",
+"Chemnitzer Umland – Erzgebirgskreis II": "ÖVP",
+"Erzgebirgskreis I": "ÖVP",
+"Zwickau": "ÖVP",
+"Vogtlandkreis": "ÖVP",
+"Waldeck": "FPÖ",
+"Kassel": "SPÖ",
+"Werra-Meißner – Hersfeld-Rotenburg": "FPÖ",
+"Schwalm-Eder": "FPÖ",
+"Marburg": "SPÖ",
+"Lahn-Dill": "FPÖ",
+"Gießen": "FPÖ",
+"Fulda": "FPÖ",
+"Main-Kinzig – Wetterau II – Schotten": "FPÖ",
+"Hochtaunus": "FPÖ",
+"Wetterau I": "FPÖ",
+"Rheingau-Taunus – Limburg": "FPÖ",
+"Wiesbaden": "FPÖ",
+"Hanau": "FPÖ",
+"Main-Taunus": "FPÖ",
+"Frankfurt am Main I": "FPÖ",
+"Frankfurt am Main II": "FPÖ",
+"Groß-Gerau": "FPÖ",
+"Offenbach": "FPÖ",
+"Darmstadt": "FPÖ",
+"Odenwald": "FPÖ",
+"Bergstraße": "FPÖ",
+"Eichsfeld – Nordhausen – Kyffhäuserkreis": "ÖVP",
+"Eisenach – Wartburgkreis – Unstrut-Hainich-Kreis": "ÖVP",
+"Jena – Sömmerda – Weimarer Land I": "ÖVP",
+"Gotha – Ilm-Kreis": "ÖVP",
+"Erfurt – Weimar – Weimarer Land II": "Grüne",
+"Gera – Greiz – Altenburger Land": "ÖVP",
+"Saalfeld-Rudolstadt – Saale-Holzland-Kreis – Saale-Orla-Kreis": "ÖVP",
+"Suhl – Schmalkalden-Meiningen – Hildburghausen – Sonneberg": "ÖVP",
+"Neuwied": "FPÖ",
+"Ahrweiler": "FPÖ",
+"Koblenz": "FPÖ",
+"Mosel/Rhein-Hunsrück": "FPÖ",
+"Kreuznach": "FPÖ",
+"Bitburg": "FPÖ",
+"Trier": "FPÖ",
+"Montabaur": "FPÖ",
+"Mainz": "FPÖ",
+"Worms": "FPÖ",
+"Ludwigshafen/Frankenthal": "FPÖ",
+"Neustadt – Speyer": "FPÖ",
+"Kaiserslautern": "SPÖ",
+"Pirmasens": "FPÖ",
+"Südpfalz": "FPÖ",
+"Altötting": "FPÖ",
+"Erding – Ebersberg": "FPÖ",
+"Freising": "FPÖ",
+"Fürstenfeldbruck": "FPÖ",
+"Ingolstadt": "FPÖ",
+"München-Nord": "FPÖ",
+"München-Ost": "FPÖ",
+"München-Süd": "FPÖ",
+"München-West/Mitte": "FPÖ",
+"München-Land": "FPÖ",
+"Rosenheim": "FPÖ",
+"Bad Tölz-Wolfratshausen – Miesbach": "FPÖ",
+"Starnberg – Landsberg am Lech": "FPÖ",
+"Traunstein": "FPÖ",
+"Weilheim": "FPÖ",
+"Deggendorf": "FPÖ",
+"Landshut": "FPÖ",
+"Passau": "FPÖ",
+"Rottal-Inn": "FPÖ",
+"Straubing": "FPÖ",
+"Amberg": "FPÖ",
+"Regensburg": "FPÖ",
+"Schwandorf": "FPÖ",
+"Weiden": "FPÖ",
+"Bamberg": "FPÖ",
+"Bayreuth": "FPÖ",
+"Coburg": "FPÖ",
+"Hof": "FPÖ",
+"Kulmbach": "FPÖ",
+"Ansbach": "FPÖ",
+"Erlangen": "FPÖ",
+"Fürth": "FPÖ",
+"Nürnberg-Nord": "FPÖ",
+"Nürnberg-Süd": "FPÖ",
+"Roth": "FPÖ",
+"Aschaffenburg": "FPÖ",
+"Bad Kissingen": "FPÖ",
+"Main-Spessart": "FPÖ",
+"Schweinfurt": "FPÖ",
+"Würzburg": "FPÖ",
+"Augsburg-Stadt": "FPÖ",
+"Augsburg-Land": "FPÖ",
+"Donau-Ries": "FPÖ",
+"Neu-Ulm": "FPÖ",
+"Memmingen – Unterallgäu": "FPÖ",
+"Oberallgäu": "FPÖ",
+"Ostallgäu": "FPÖ",
+"Stuttgart I": "NEOS",
+"Stuttgart II": "FPÖ",
+"Böblingen": "FPÖ",
+"Esslingen": "FPÖ",
+"Nürtingen": "FPÖ",
+"Göppingen": "FPÖ",
+"Waiblingen": "FPÖ",
+"Ludwigsburg": "FPÖ",
+"Neckar-Zaber": "FPÖ",
+"Heilbronn": "FPÖ",
+"Schwäbisch Hall – Hohenlohe": "FPÖ",
+"Backnang – Schwäbisch Gmünd": "FPÖ",
+"Aalen – Heidenheim": "FPÖ",
+"Karlsruhe-Stadt": "NEOS",
+"Karlsruhe-Land": "FPÖ",
+"Rastatt": "FPÖ",
+"Heidelberg": "FPÖ",
+"Mannheim": "FPÖ",
+"Odenwald – Tauber": "FPÖ",
+"Rhein-Neckar": "FPÖ",
+"Bruchsal – Schwetzingen": "FPÖ",
+"Pforzheim": "FPÖ",
+"Calw": "FPÖ",
+"Freiburg": "NEOS",
+"Lörrach – Müllheim": "FPÖ",
+"Emmendingen – Lahr": "FPÖ",
+"Offenburg": "FPÖ",
+"Rottweil – Tuttlingen": "FPÖ",
+"Schwarzwald-Baar": "FPÖ",
+"Konstanz": "FPÖ",
+"Waldshut": "FPÖ",
+"Reutlingen": "FPÖ",
+"Tübingen": "FPÖ",
+"Ulm": "FPÖ",
+"Biberach": "FPÖ",
+"Bodensee": "FPÖ",
+"Ravensburg": "FPÖ",
+"Zollernalb – Sigmaringen": "FPÖ",
+"Saarbrücken": "SPÖ",
+"Saarlouis": "FPÖ",
+"St. Wendel": "FPÖ",
+"Homburg": "SPÖ"
+};
+
+/* ---- Party setup ---- */
+const PARTIES = ["FPÖ", "ÖVP", "SPÖ", "NEOS", "Grüne", "KPÖ", "OTH"];
+const PARTY_COLORS = {"FPÖ":"#002060","ÖVP":"#00B0F0","SPÖ":"#FF0000","NEOS":"#FF3399","Grüne":"#00B050","KPÖ":"#990000","OTH":"#DADADA"};
+const GE2024 = {"FPÖ":28.9,"ÖVP":26.3,"SPÖ":21.1,"NEOS":9.1,"Grüne":8.2,"KPÖ":2.4,"OTH":4.0};
+const DEFAULTS = {"FPÖ":36.1,"ÖVP":20.9,"SPÖ":18.0,"NEOS":7.4,"Grüne":10.3,"KPÖ":3.6,"OTH":3.7};
+const PREV_2023 = {"FPÖ":57,"ÖVP":51,"SPÖ":41,"NEOS":18,"Grüne":16,"KPÖ":0,"OTH":0};
+
+const PR_TOTAL_SEATS = 183;
+const PR_THRESHOLD = 4; // percent
+
+const PARTY_RANGES = {
+  "FPÖ": [0, 100],
+  "ÖVP": [0, 100],
+  "SPÖ": [0, 100],
+  "NEOS": [0, 100],
+  "Grüne": [0, 100],
+  "KPÖ": [0, 60]
+};
+
+  // ---- Vote concentration (adjustable per party) ----
+// Positive values increase local strength when local > national baseline,
+// negative values reduce local strength in both comparisons.
+// Defaults: 0
+const VOTE_CONCENTRATION = {
+  "FPÖ": 0.00,
+  "ÖVP": 0.00,
+  "SPÖ": 0.00,
+  "NEOS": 0.00,
+  "Grüne": 0.00,
+  "KPÖ": 0.00,
+  "OTH": 0.00
+};
+
+  const INCUMBENT_STRENGTH = {
+  FPÖ: 0.00,
+  ÖVP: 0.00,
+  SPÖ: 0.00,
+  NEOS: 0.00,
+  Grüne: 0.00,
+  KPÖ: 0.00
+};
+
+const VOTE_CONCENTRATION_DEFAULTS = { ...VOTE_CONCENTRATION };
+const INCUMBENT_STRENGTH_DEFAULTS = { ...INCUMBENT_STRENGTH };
+
+  const CONC_DISPLAY_OFFSET = {
+  FPÖ: 0.0,
+  ÖVP: 0.0,
+  SPÖ: 0.0,
+  NEOS: 0.0,
+  Grüne: 0.0,
+  KPÖ: 0.0
+};
+
+  // display offsets for the incumbent input boxes (display only)
+const INC_DISPLAY_OFFSET = {
+  FPÖ: 0.0,
+  ÖVP: 0.0,
+  SPÖ: 0.0,
+  NEOS: 0.0,
+  Grüne: 0.0,
+  KPÖ: 0.0
+};
+
+  const CONC_EDITABLE = ["FPÖ", "ÖVP", "SPÖ", "NEOS", "Grüne", "KPÖ"];
+
+  // Build the vote concentration editor table
+function renderConcentrationTable() {
+  const tbody = document.getElementById("concentration-body");
+  tbody.innerHTML = "";
+
+  CONC_EDITABLE.forEach(p => {
+    const row = document.createElement("tr");
+
+    row.innerHTML = `
+      <td class="party-column" style="--party-color:${PARTY_COLORS[p]}">${p}</td>
+
+      <!-- Concentration column (display offset applied) -->
+      <td>
+        <input type="number"
+          id="conc-${p}"
+          value="${((VOTE_CONCENTRATION[p] * 100) + (CONC_DISPLAY_OFFSET[p] || 0)).toFixed(1)}"
+          step="0.5"
+          min="-100"
+          max="100"
+          style="width:70px; text-align:center;"
+        >
+      </td>
+
+      <!-- Incumbent strength column -->
+      <td>
+        <input type="number"
+          id="inc-${p}"
+          value="${(((Number(INCUMBENT_STRENGTH[p] || 0) * 100) + (INC_DISPLAY_OFFSET[p] || 0))).toFixed(1)}"
+          step="0.5"
+          min="-100"
+          max="100"
+          style="width:70px; text-align:center;"
+        >
+      </td>
+    `;
+
+    tbody.appendChild(row);
+  });
+}
+
+  function clampConcentration(val) {
+  if (isNaN(val)) return 0;
+  return Math.max(-100, Math.min(100, val));
+}
+
+function bindConcentrationInputs() {
+  const concInputs = CONC_EDITABLE.map(p => document.getElementById(`conc-${p}`));
+  const incInputs  = CONC_EDITABLE.map(p => document.getElementById(`inc-${p}`));
+
+  // --- Concentration inputs (existing behaviour + display offset handling) ---
+  concInputs.forEach((input, index) => {
+    let originalValue = input.value;
+
+    input.addEventListener("focus", () => {
+      originalValue = input.value;
+      input.dataset.displayValue = originalValue;
+      input.value = "";
+    });
+
+    input.addEventListener("input", () => {
+      const raw = input.value;
+      if (raw === "-") return;
+      let val = parseFloat(raw);
+      if (isNaN(val)) return;
+      val = clampConcentration(val);
+
+      const party = input.id.replace("conc-", "");
+      // store REAL value = displayed - offset
+      VOTE_CONCENTRATION[party] = (val - (CONC_DISPLAY_OFFSET[party] || 0)) / 100;
+
+      calculate();
+    });
+
+    input.addEventListener("blur", () => {
+      if (input.value === "" || input.value === "-" || isNaN(parseFloat(input.value))) {
+        input.value = originalValue;
+        return;
+      }
+      let val = clampConcentration(parseFloat(input.value));
+      input.value = val.toFixed(1);
+
+      const party = input.id.replace("conc-", "");
+      VOTE_CONCENTRATION[party] = (val - (CONC_DISPLAY_OFFSET[party] || 0)) / 100;
+
+      calculate();
+    });
+
+    input.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        if (concInputs[index + 1]) concInputs[index + 1].focus(); else concInputs[0].focus();
+      }
+    });
+  });
+
+  // --- Incumbent strength inputs (must ONLY update INCUMBENT_STRENGTH) ---
+  incInputs.forEach((input, index) => {
+    let originalValue = input.value;
+
+    input.addEventListener("focus", () => {
+      originalValue = input.value;
+      input.dataset.displayValue = originalValue;
+      input.value = "";
+    });
+
+    input.addEventListener("input", () => {
+      const raw = input.value;
+      if (raw === "-") return;
+      let val = parseFloat(raw);
+      if (isNaN(val)) return;
+      val = clampConcentration(val);
+
+      const party = input.id.replace("inc-", "");
+      INCUMBENT_STRENGTH[party] = (val - (INC_DISPLAY_OFFSET[party] || 0)) / 100;
+
+      calculate();
+    });
+
+    input.addEventListener("blur", () => {
+      if (input.value === "" || input.value === "-" || isNaN(parseFloat(input.value))) {
+        input.value = originalValue;
+        return;
+      }
+      let val = clampConcentration(parseFloat(input.value));
+      input.value = val.toFixed(1);
+
+      const party = input.id.replace("inc-", "");
+      INCUMBENT_STRENGTH[party] = (val - (INC_DISPLAY_OFFSET[party] || 0)) / 100;
+
+      calculate();
+    });
+
+    input.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        if (incInputs[index + 1]) incInputs[index + 1].focus(); else incInputs[0].focus();
+      }
+    });
+  });
+}
+
+// Full party name aliases
+const PARTY_ALIASES = {
+  "FPÖ": "CDU/CSU",
+  "ÖVP": "ÖVP",
+  "SPÖ": "SPÖ",
+  "NEOS": "NEOS",
+  "Grüne": "Die Grüne",
+  "KPÖ": "KPÖ",
+  "FDP": "FDP",
+  "FW": "FW",
+  "OTH": "Independent/Other"
+};
+
+const parties = PARTIES.map(name => ({
+  name,
+  color: PARTY_COLORS[name] || "#999",
+  ge2024: GE2024[name],
+  votes: DEFAULTS[name],
+  final: 0
+}));
+
+/* ---- Render table ---- */
+function renderTable() {
+  const tbody = document.getElementById('tbody');
+
+tbody.innerHTML = parties.map((p, i) => {
+  // 🟩 Skip OTH for now — we’ll insert it manually after Grüne
+  if (p.name === "OTH") return "";
+
+  let row = `
+    <tr>
+      <td class="party-column" style="--party-color:${p.color}">${p.name}</td>
+      <td class="ge2024-column">${p.ge2024.toFixed(1)}%</td>
+      <td>
+        ${p.name === "OTH" ? `
+          <div class="input-wrapper">
+            <input type="number" id="votes-${i}" value="${p.votes.toFixed(1)}" disabled>
+            <span class="percent-sign">%</span>
+          </div>
+        ` : `
+          <div class="input-wrapper">
+            <input type="number" id="votes-${i}" value="${p.votes.toFixed(1)}" min="0" max="100" step="0.1">
+            <span class="percent-sign">%</span>
+          </div>
+        `}
+      </td>
+      <td class="seats-column" id="seats-${i}">—</td>
+      <td class="diff-column" id="diff-${i}">—</td>
+    </tr>
+  `;
+
+  // --- Insert OTH row right after KPÖ ---
+  if (p.name === "KPÖ") {
+    // find OTH’s index
+    const othIndex = parties.findIndex(x => x.name === "OTH");
+    const oth = parties[othIndex];
+    if (oth) {
+      row += `
+        <tr>
+          <td class="party-column" style="--party-color:${oth.color}">${oth.name}</td>
+          <td class="ge2024-column">${oth.ge2024.toFixed(1)}%</td>
+          <td>
+            <div class="input-wrapper">
+              <input type="number" id="votes-${othIndex}" value="${oth.votes.toFixed(1)}" disabled>
+              <span class="percent-sign">%</span>
+            </div>
+          </td>
+          <td class="seats-column" id="seats-${othIndex}">—</td>
+          <td class="diff-column" id="diff-${othIndex}">—</td>
+        </tr>
+      `;
+    }
+
+  }
+
+  return row;
+}).join('');
+
+  // ✅ keep your original input logic below unchanged
+const inputs = document.querySelectorAll('.input-wrapper input');
+inputs.forEach((input, index) => {
+  let originalValue = input.value;
+  let hasChanged = false; // track if user actually changed it
+
+  // When user focuses: remember old value, clear visually, but preserve logical value
+  input.addEventListener('focus', () => {
+    originalValue = input.value;
+    input.dataset.displayValue = originalValue; // store in data attr
+    input.value = ''; // visually empty
+    hasChanged = false; // reset change tracking
+  });
+
+  // When user types, mark as changed and update total
+  input.addEventListener('input', () => {
+    hasChanged = true;
+    updateVoteTotal();
+    document.getElementById('calculate').style.background = '#ffa500';
+  });
+
+  // When user leaves the box
+  input.addEventListener('blur', () => {
+    // if left blank → restore visually & logically
+    if (input.value === '' || isNaN(parseFloat(input.value))) {
+      input.value = originalValue;
+    } else {
+    // 👇 Force 1 decimal place display
+    input.value = parseFloat(input.value).toFixed(1);
+  }
+
+    // Only recalc if user *actually changed* the value
+    if (hasChanged && parseFloat(input.value) !== parseFloat(originalValue)) {
+      calculate();
+    }
+  });
+
+  // When user presses Enter
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+
+      // if left blank, restore previous visually
+      if (input.value === '' || isNaN(parseFloat(input.value))) {
+        input.value = originalValue;
+      }
+
+      // move to next input
+      if (inputs[index + 1]) {
+        inputs[index + 1].focus();
+      } else {
+        inputs[0].focus(); // loop to top
+      }
+    }
+  });
+});
+
+  updateVoteTotal();
+}
+
+function updateVoteTotal() {
+  // --- Weight multipliers for total and OTH calculation ---
+  const WEIGHTS = {
+    "KPÖ": 1.0, 
+    "FDP": 1.0,     
+    "FW": 1.0  
+  };
+
+  let weightedSum = 0;
+
+  parties.forEach((p, i) => {
+    if (p.name !== "OTH") {
+      const rawValue = parseFloat(document.getElementById(`votes-${i}`).value) || 0;
+      const weight = WEIGHTS[p.name] || 1;  // 👈 Default weight = 1 (no change)
+      weightedSum += rawValue * weight;
+    }
+  });
+
+  // Calculate "OTH" as whatever remains of 100 after weighted sum
+  const othersValue = Math.max(0, 100 - weightedSum);
+  const othersIndex = parties.findIndex(p => p.name === "OTH");
+
+  if (othersIndex !== -1) {
+    const othersInput = document.getElementById(`votes-${othersIndex}`);
+    if (othersInput) {
+      othersInput.value = othersValue.toFixed(1);
+    }
+  }
+
+  // Update total votes row (weighted total + adjusted OTH)
+  document.getElementById('total-votes').textContent = (weightedSum + othersValue).toFixed(1) + '%';
+}
+
+  // Apply vote concentration adjustments to a constituency baseline row.
+// - row: the original constituency baseline object (has keys for each party).
+// - baseNat: BASELINE.baseline_national (national baselines).
+// - conc: VOTE_CONCENTRATION object.
+// Returns a NEW object with adjusted party baseline values for that constituency.
+function applyVoteConcentrationToRow(row, baseNat, conc) {
+  const out = { name: row.name };
+  PARTIES.forEach(p => {
+    const local = Number(row[p] ?? 0);      // local baseline
+    const nat   = Number(baseNat[p] ?? 0);  // national baseline
+
+    // --- concentration multiplier (safe defaults) ---
+    const concVal = Number(conc[p] ?? 0);
+    let multiplier = 1;
+    if (local > nat) multiplier = 1 + concVal;
+    else multiplier = 1 - concVal;
+
+    // safety: ensure multiplier numeric
+    if (!isFinite(multiplier)) multiplier = 1;
+    multiplier = Math.max(0, multiplier);
+
+    // --- incumbent strength (only for incumbent party) ---
+    const incumbentParty = CONSTITUENCY_INCUMBENTS[row.name];
+    const incVal = Number(INCUMBENT_STRENGTH[p] ?? 0); // default 0 if missing
+    if (p === incumbentParty && incVal !== 0) {
+      multiplier = multiplier * (1 + incVal);
+      if (!isFinite(multiplier)) multiplier = Math.max(0, Number(multiplier) || 0);
+    }
+
+    out[p] = local * multiplier;
+  });
+  return out;
+}
+
+/* ---- Proportional swing (with vote concentration step) ---- */
+function computeConstituencyShares(){
+  const target = {};
+  PARTIES.forEach((n,i)=> target[n] = (parseFloat(document.getElementById(`votes-${i}`).value)||0)/100);
+
+  const base = BASELINE.baseline_national;
+  const eps = 1e-9;
+
+  return BASELINE.constituencies.map(originalRow => {
+    // 1) Apply vote concentration adjustments BEFORE proportional swing
+    const adjustedRow = applyVoteConcentrationToRow(originalRow, base, VOTE_CONCENTRATION);
+
+    // 2) Now compute proportional swing relative to national baselines
+    const out = { name: adjustedRow.name };
+    let sum = 0;
+    PARTIES.forEach(p => {
+      const baseNat = base[p] ?? 0;
+      const targetNat = target[p] ?? baseNat;
+      // ratio = target national share / baseline national share
+      const ratio = (baseNat > eps) ? (targetNat / baseNat) : (targetNat > 0 ? (targetNat / eps) : 0);
+      const val = (adjustedRow[p] ?? 0) * ratio;
+      out[p] = val;
+      sum += val;
+    });
+
+    // 3) Normalize so the constituency shares sum to 1 (if sum > 0)
+    if (sum > 0) PARTIES.forEach(p => out[p] = out[p] / sum);
+
+    return out;
+  });
+}
+
+/* ---- D’Hondt ---- */
+function dhondtSeats(votes,seats=6,nationalVotes,validParties){
+  const alloc=Object.fromEntries(validParties.map(p=>[p,0]));
+  for(let s=0;s<seats;s++){
+    const quotients=validParties.map(p=>({p,q:(votes[p]||0)/(alloc[p]+1)}));
+    let best=quotients[0];
+    for(let i=1;i<quotients.length;i++){
+      const x=quotients[i];
+      if(x.q>best.q||(Math.abs(x.q-best.q)<1e-12&&(nationalVotes[x.p]||0)>(nationalVotes[best.p]||0)))best=x;
+    }
+    alloc[best.p]+=1;
+  }
+  return alloc;
+}
+
+/* ---- Calculate ---- */
+function calculate(){
+  const nationalVotes={};
+  parties.forEach((p,i)=>{
+    p.votes=parseFloat(document.getElementById(`votes-${i}`).value)||0;
+    nationalVotes[p.name]=p.votes;
+  });
+
+  const perConst=computeConstituencyShares();
+  window.latestConstituencyResults = perConst;
+  const totals=Object.fromEntries(PARTIES.map(p=>[p,0]));
+
+perConst.forEach(row => {
+  const sVotes = row; // local votes in this constituency
+
+  // 👇 Calculate total valid vote sum in this constituency
+  let totalVotes = 0;
+  PARTIES.forEach(p => totalVotes += sVotes[p] || 0);
+
+  // 👇 Apply a constituency-level threshold (e.g. 3% of local valid votes)
+  const validParties = PARTIES.filter(p => (sVotes[p] || 0) >= 0.03 * totalVotes);
+
+  // 👇 Allocate seats only among those parties
+  const s = dhondtSeats(sVotes, CONSTITUENCY_SEATS[row.name] || 6, nationalVotes, validParties);
+
+  PARTIES.forEach(p => totals[p] += (s[p] || 0));
+});
+
+// FPTP totals still drive the MAP (via window.latestConstituencyResults)
+// But the TABLE and coalition builder use PR seats
+
+const prSeats = calculatePR();
+prSeats["OTH"] = 1;
+
+PARTIES.forEach((n, i) => {
+  const seats = prSeats[n] || 0;
+  document.getElementById(`seats-${i}`).textContent = seats;
+  parties[i].final = seats;
+
+  const diff = seats - (PREV_2023[n] || 0);
+  const diffCell = document.getElementById(`diff-${i}`);
+  if (diff > 0) { diffCell.textContent = `+${diff}`; diffCell.className = 'diff-column positive'; }
+  else if (diff < 0) { diffCell.textContent = `${diff}`; diffCell.className = 'diff-column negative'; }
+  else { diffCell.textContent = '(=)'; diffCell.className = 'diff-column equal'; }
+});
+
+document.getElementById('total-seats').textContent = PR_TOTAL_SEATS;
+document.getElementById('calculate').style.background = '#008500';
+updateCoalitionFromTotals(prSeats);
+  
+document.querySelector(".note").textContent = `Majority = 316 seats`;
+
+// --- auto-refresh constituency view if one is selected ---
+const currentName = document.getElementById("constituency-search").value.trim();
+if (currentName) showConstituencyResults(currentName);
+
+if (window.updateMapColors) window.updateMapColors();
+}
+
+function calculatePR() {
+  // Read current vote inputs
+  const votes = {};
+  parties.forEach((p, i) => {
+    votes[p.name] = parseFloat(document.getElementById(`votes-${i}`).value) || 0;
+  });
+
+// Count FPTP constituency wins per party
+  const constituencyWins = {};
+  PARTIES.forEach(p => constituencyWins[p] = 0);
+  (window.latestConstituencyResults || []).forEach(row => {
+    let best = null, bestVote = -1;
+    PARTIES.forEach(p => { if ((row[p] || 0) > bestVote) { bestVote = row[p]; best = p; } });
+    if (best) constituencyWins[best]++;
+  });
+
+  // Apply 5% threshold OR 3+ constituency wins (Grundmandatsklausel)
+  const eligible = parties.filter(p =>
+    p.name !== "OTH" &&
+    (votes[p.name] >= PR_THRESHOLD || constituencyWins[p.name] >= 50)
+  );
+
+  const prSeats = {};
+  parties.forEach(p => prSeats[p.name] = 0);
+
+  if (eligible.length > 0) {
+    const totalEligibleVotes = eligible.reduce((s, p) => s + votes[p.name], 0);
+
+    // Largest remainder (Hare quota) method — same as your PR calculator
+    eligible.forEach(p => {
+      prSeats[p.name] = Math.floor((votes[p.name] / totalEligibleVotes) * PR_TOTAL_SEATS);
+    });
+
+    let assigned = eligible.reduce((s, p) => s + prSeats[p.name], 0);
+    let remaining = PR_TOTAL_SEATS - assigned;
+    const remainders = eligible
+      .map(p => ({ name: p.name, rem: (votes[p.name] / totalEligibleVotes) * PR_TOTAL_SEATS - prSeats[p.name] }))
+      .sort((a, b) => b.rem - a.rem);
+
+    for (let i = 0; i < remaining; i++) {
+      prSeats[remainders[i % remainders.length].name]++;
+    }
+  }
+
+  return prSeats;
+}
+
+/* ---- Reset ---- */
+document.getElementById('reset').addEventListener('click', () => {
+
+  // ---- Reset vote share inputs ----
+  parties.forEach((p, i) => {
+    const input = document.getElementById(`votes-${i}`);
+    if (input) input.value = DEFAULTS[p.name].toFixed(1);
+  });
+
+// ---- Reset concentration & incumbent strength ----
+  CONC_EDITABLE.forEach(p => {
+    VOTE_CONCENTRATION[p] = VOTE_CONCENTRATION_DEFAULTS[p];
+    INCUMBENT_STRENGTH[p] = INCUMBENT_STRENGTH_DEFAULTS[p];
+  });
+
+  // ---- Reset display values for settings panel ----
+  CONC_EDITABLE.forEach(p => {
+    const concInput = document.getElementById(`conc-${p}`);
+    if (concInput) {
+      concInput.value = ((VOTE_CONCENTRATION_DEFAULTS[p] * 100) + (CONC_DISPLAY_OFFSET[p] || 0)).toFixed(1);
+    }
+
+    const incInput = document.getElementById(`inc-${p}`);
+    if (incInput) {
+      incInput.value = ((INCUMBENT_STRENGTH_DEFAULTS[p] * 100) + (INC_DISPLAY_OFFSET[p] || 0)).toFixed(1);
+    }
+  });
+
+  // ---- Recalculate everything ----
+  calculate();
+  updateVoteTotal();
+
+  // ---- Return calculate button to green ----
+  document.getElementById('calculate').style.background = '#008500';
+});
+
+/* ---- Randomise ---- */
+document.getElementById('randomise').addEventListener('click', () => {
+
+  // Helper: normalise n random values to exactly 'total', displayed as percentages
+function randomNormalisedWithRanges(parties, total) {
+  const raws = parties.map(name => {
+    const [min, max] = PARTY_RANGES[name];
+    return min + Math.random() * (max - min);
+  });
+
+  const sum = raws.reduce((a, b) => a + b, 0);
+
+  const scaled = raws.map(v => Math.floor((v / sum) * total * 10) / 10);
+
+  const runningSum = scaled.slice(0, -1).reduce((a, b) => a + b, 0);
+  scaled[scaled.length - 1] = Math.round((total - runningSum) * 10) / 10;
+
+  return scaled;
+}
+
+  // --- GB main parties: FPÖ, ÖVP, SPÖ, NEOS, Grüne — guaranteed total of 96 ---
+  const gbParties = ["FPÖ", "ÖVP", "SPÖ", "NEOS", "Grüne", "KPÖ", "FDP", "FW"];
+const gbValues = randomNormalisedWithRanges(gbParties, 98);
+  gbParties.forEach((name, j) => {
+    const i = parties.findIndex(p => p.name === name);
+    const input = document.getElementById(`votes-${i}`);
+    if (input) input.value = gbValues[j].toFixed(1);
+  });
+
+  // --- Vote concentration: random displayed value between -50.0 and 50.0 ---
+  CONC_EDITABLE.forEach(p => {
+    const randomDisplayVal = Math.round((Math.random() * 100 - 50) * 10) / 10;
+    VOTE_CONCENTRATION[p] = (randomDisplayVal - (CONC_DISPLAY_OFFSET[p] || 0)) / 100;
+    const concInput = document.getElementById(`conc-${p}`);
+    if (concInput) concInput.value = randomDisplayVal.toFixed(1);
+  });
+
+  updateVoteTotal();
+  calculate();
+});
+
+const settingsBadge = document.getElementById('settings-badge');
+
+document.getElementById('randomise').addEventListener('click', () => {
+  settingsBadge.style.display = 'block';
+});
+
+document.getElementById('reset').addEventListener('click', () => {
+  settingsBadge.style.display = 'none';
+});
+
+parties.forEach((p, i) => {
+  const input = document.getElementById(`votes-${i}`);
+  if (input) input.addEventListener('input', () => {
+    settingsBadge.style.display = 'none';
+  });
+});
+  
+document.getElementById('calculate').addEventListener('click', calculate);
+renderTable();
+document.addEventListener('DOMContentLoaded', () => calculate());
+  
+  document.addEventListener("DOMContentLoaded", () => {
+  renderConcentrationTable();
+  bindConcentrationInputs();
+});
+
+
+/* ---- Coalition Builder ---- */
+const COAL_TOTAL=183,COAL_MAJ=92;
+let selected=[];
+const legend=document.getElementById("legend"),overlay=document.getElementById("coalition-overlay"),counter=document.getElementById("counter");
+
+function toggleParty(n){
+  if(selected.includes(n))selected=selected.filter(x=>x!==n);
+  else selected.push(n);
+  renderCoalition(lastTotalsCache);
+}
+
+let lastTotalsCache=null;
+function updateCoalitionFromTotals(t){lastTotalsCache=t;renderCoalition(t);}
+
+function renderCoalition(t){
+  if(!t)return;
+  
+  
+overlay.innerHTML = "";
+legend.innerHTML = "";
+
+// 🟢 Only show parties that currently have seats
+const validParties = PARTIES.filter(n => (t[n] || 0) > 0);
+
+// ❌ Do NOT clear "selected" — this allows zero-seat parties to stay selected
+// selected = selected.filter(n => validParties.includes(n));
+
+validParties.forEach(n => {
+  const s = t[n] || 0;
+  const item = document.createElement('div');
+  item.className = 'legend-item' + (selected.includes(n) ? ' active' : '');
+  item.innerHTML = `<div class="legend-box" style="background:${PARTY_COLORS[n] || '#999'}"></div> <strong>${n}</strong> ${s}`;
+  item.onclick = () => toggleParty(n);
+  legend.appendChild(item);
+});
+
+  const totalSel=selected.reduce((s,n)=>s+(t[n]||0),0);
+  const width=(totalSel/COAL_TOTAL)*100;
+  overlay.style.width="0%";
+  overlay.innerHTML="";
+  if(totalSel>0){
+    selected.forEach(n=>{
+      const s=t[n]||0;
+      const seg=document.createElement('div');
+      seg.className='segment';
+      seg.style.flexBasis=((s/totalSel)*100)+'%';
+      seg.style.background=PARTY_COLORS[n]||"#999";
+      overlay.appendChild(seg);
+    });
+  }
+  requestAnimationFrame(()=>overlay.style.width=width+"%");
+  counter.textContent=`${totalSel} / ${COAL_TOTAL}`;
+  counter.style.color=totalSel>=COAL_MAJ?"#2BA84A":"#000";
+  document.querySelectorAll(".legend-item").forEach(el=>{
+    const n=el.querySelector("strong").textContent;
+    el.classList.toggle("active",selected.includes(n));
+  });
+}
+/* ---- Tab Switching (fixed state handling) ---- */
+const tabResult = document.getElementById("tab-result");
+const tab2023 = document.getElementById("tab-2023");
+let is2023View = false;
+let lastUserTotals = null; // store the most recent calculated result
+
+// --- patch: remember user totals whenever calculator runs ---
+const originalUpdateCoalitionFromTotals = updateCoalitionFromTotals;
+updateCoalitionFromTotals = function(t) {
+  if (!is2023View) lastUserTotals = t; // only store when user-generated
+  originalUpdateCoalitionFromTotals(t);
+};
+
+tabResult.addEventListener("click", () => {
+  if (!tabResult.classList.contains("active")) {
+    tabResult.classList.add("active");
+    tab2023.classList.remove("active");
+    is2023View = false;
+    document.getElementById("tab-pill").style.transform = "translateX(0%)";
+    updateCoalitionFromTotals(lastUserTotals || lastTotalsCache);
+  }
+});
+
+tab2023.addEventListener("click", () => {
+  if (!tab2023.classList.contains("active")) {
+    tab2023.classList.add("active");
+    tabResult.classList.remove("active");
+    is2023View = true;
+    document.getElementById("tab-pill").style.transform = "translateX(100%)";
+    originalUpdateCoalitionFromTotals(PREV_2023);
+  }
+});
+
+  /* ---- Constituency Search + Bar Display ---- */
+const searchInput = document.getElementById("constituency-search");
+
+  // ---- Focus + blur behavior for constituency search ----
+let lastSelectedConstituency = "";
+
+searchInput.addEventListener("focus", () => {
+  lastSelectedConstituency = searchInput.value;
+  searchInput.value = "";
+});
+
+searchInput.addEventListener("blur", () => {
+  // restore only if user didn't type anything new
+  if (searchInput.value.trim() === "" && lastSelectedConstituency) {
+    searchInput.value = lastSelectedConstituency;
+  }
+});
+
+const dropdown = document.getElementById("constituency-dropdown");
+const barsDiv = document.getElementById("constituency-bars");
+const winnerText = document.getElementById("winner-text");
+showPlaceholderBars();
+
+// ---- Placeholder bars shown before user selection ----
+function showPlaceholderBars() {
+  barsDiv.innerHTML = "";
+  for (let i = 0; i < 5; i++) {
+    const row = document.createElement("div");
+    row.className = "bar-row";
+
+    const partyLabel = document.createElement("div");
+    partyLabel.className = "bar-party";
+    partyLabel.textContent = ""; // no text yet
+    row.appendChild(partyLabel);
+
+    const wrapper = document.createElement("div");
+    wrapper.className = "bar-wrapper";
+
+    const bar = document.createElement("div");
+    bar.className = "bar";
+    bar.style.width = "0%"; // unfilled
+    bar.style.background = "#ccc"; // light grey placeholder color
+    wrapper.appendChild(bar);
+
+    row.appendChild(wrapper);
+
+    const valueLabel = document.createElement("div");
+    valueLabel.className = "bar-value";
+    valueLabel.textContent = ""; // no text yet
+    row.appendChild(valueLabel);
+
+    barsDiv.appendChild(row);
+  }
+
+  winnerText.textContent = ""; // no winner yet
+}
+
+// Build searchable list of names
+const allConstituencies = BASELINE.constituencies.map(c => c.name);
+
+// Filter + display dropdown
+searchInput.addEventListener("input", () => {
+  const query = searchInput.value.trim().toLowerCase();
+  dropdown.innerHTML = "";
+  if (query.length === 0) {
+    dropdown.style.display = "none";
+    return;
+  }
+const matches = allConstituencies.filter(name => {
+  const lowerName = name.toLowerCase();
+  const words = lowerName.split(/[\s\-']/); // split on spaces, hyphens, apostrophes
+  const queryWords = query.split(/\s+/).filter(Boolean); // split the user input by spaces
+
+  // every typed word must match the start of *some* word in the constituency name
+  return queryWords.every(qw =>
+    words.some(word => word.startsWith(qw))
+  );
+});
+  matches.slice(0, 10).forEach(name => {
+    const li = document.createElement("li");
+    li.textContent = name;
+    li.addEventListener("click", () => selectConstituency(name));
+    dropdown.appendChild(li);
+  });
+  dropdown.style.display = matches.length > 0 ? "block" : "none";
+});
+
+document.addEventListener("click", (e) => {
+  if (!e.target.closest(".search-container")) dropdown.style.display = "none";
+});
+
+function selectConstituency(name) {
+  searchInput.value = name;
+  dropdown.style.display = "none";
+  showConstituencyResults(name);
+}
+
+function showConstituencyResults(name) {
+const dataset = window.latestConstituencyResults || BASELINE.constituencies;
+const c = dataset.find(x => x.name === name);
+  if (!c) return;
+
+  // Compute total and shares
+  const partyShares = PARTIES.map(p => ({
+  name: p,
+  value: c[p] || 0,
+  color: PARTY_COLORS[p]
+  })).filter(x => x.value > 0 || x.name === "OTH");
+
+  const sorted = partyShares.sort((a,b) => b.value - a.value);
+  const max = sorted[0].value;
+
+  barsDiv.innerHTML = "";
+  sorted.forEach(p => {
+  const row = document.createElement("div");
+  row.className = "bar-row";
+
+  // Party label on the left
+  const partyLabel = document.createElement("div");
+  partyLabel.className = "bar-party";
+  partyLabel.textContent = p.name;
+  row.appendChild(partyLabel);
+
+  // Bar wrapper + coloured bar inside
+  const wrapper = document.createElement("div");
+  wrapper.className = "bar-wrapper";
+
+  const bar = document.createElement("div");
+  bar.className = "bar";
+    
+// Determine scale: if the largest party < 50%, we compress so 50% = full width
+let scaleFactor = 1;
+if (max < 0.5) {
+  scaleFactor = 1 / 0.5; // we'll map 50% vote to 100% width
+}
+
+// Scale each bar relative to either 100% or 50% rule
+let barWidth;
+if (max >= 0.5) {
+  // normal proportional scaling
+  barWidth = (p.value / max) * 100;
+} else {
+  // compress so 50% = 100% width
+  barWidth = (p.value / 0.5) * 100;
+}
+
+// clamp to 100%
+barWidth = Math.min(barWidth, 100);
+bar.style.width = barWidth + "%";
+
+  bar.style.background = p.color;
+  wrapper.appendChild(bar);
+
+row.appendChild(wrapper);
+
+// Percentage value outside the bar (right side)
+const valueLabel = document.createElement("div");
+valueLabel.className = "bar-value";
+valueLabel.textContent = `${(p.value * 100).toFixed(1)}%`;
+row.appendChild(valueLabel);
+
+barsDiv.appendChild(row);
+});
+
+  const winner = sorted[0];
+const incumbent = CONSTITUENCY_INCUMBENTS[name];
+const winnerAlias = PARTY_ALIASES[winner.name] || winner.name;
+const incumbentAlias = incumbent ? (PARTY_ALIASES[incumbent] || incumbent) : null;
+
+// helper to choose display colour
+function partyColor(partyCode) {
+  if (["KPÖ", "ALL"].includes(partyCode)) return "#000000"; // black
+  if (partyCode === "OTH") return "#999999"; // grey for Independent/Other
+  return PARTY_COLORS[partyCode] || "#000000";
+}
+
+
+}  
+
+/* ---- Floating GB→UK Mini Calculator ---- */
+const helpBtn = document.getElementById("help-button");
+const helpPanel = document.getElementById("help-panel");
+
+// toggle open/close ONLY when button clicked
+helpBtn.addEventListener("click", () => {
+  helpPanel.style.display = helpPanel.style.display === "block" ? "none" : "block";
+});
+
+  (function() {
+  var css = document.createElement('link');
+  css.rel = 'stylesheet';
+  css.href = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css';
+  document.head.appendChild(css);
+  var js = document.createElement('script');
+  js.src = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js';
+  js.onload = initMap;
+  document.head.appendChild(js);
+  var map, layer;
+  var GJ = {
+"type": "FeatureCollection",
+"name": "BoundariesTemp",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "WKR_NR": 1, "name": "Flensburg – Schleswig" }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ 9.708774270300667, 54.830532764762452 ], [ 9.732933616275297, 54.824934746207489 ], [ 9.739943921815541, 54.823309230640753 ], [ 9.741104262689449, 54.823449079942975 ], [ 9.746717702317868, 54.824125449255874 ], [ 9.790880531334201, 54.79797496576078 ], [ 9.794599298923435, 54.794774031212121 ], [ 9.794606450382467, 54.794343326557573 ], [ 9.794769937919682, 54.793850671485018 ], [ 9.7949962824827, 54.793313494278465 ], [ 9.795797028963049, 54.791500990066204 ], [ 9.796867692767924, 54.790030437892668 ], [ 9.797671634861393, 54.789000261837941 ], [ 9.798297358165101, 54.788220844119422 ], [ 9.800401675312878, 54.785790618791275 ], [ 9.801715870057723, 54.784325290691861 ], [ 9.806034207208938, 54.780583660880758 ], [ 9.807767838988115, 54.779083270639667 ], [ 9.809698058840675, 54.777615417007858 ], [ 9.813606801167772, 54.774668588551314 ], [ 9.831433354779003, 54.761561853857046 ], [ 9.832827543341896, 54.760658462070573 ], [ 9.83487303531439, 54.759537886908028 ], [ 9.837188409486416, 54.758505228614325 ], [ 9.84143758028277, 54.757197626321684 ], [ 9.842819909341246, 54.756810026769081 ], [ 9.845578708504092, 54.756036404424748 ], [ 9.85030096907386, 54.754821305573429 ], [ 9.851866322960527, 54.754473129457821 ], [ 9.864906197536225, 54.752587519038457 ], [ 9.865830240057727, 54.752463909138186 ], [ 9.866431007487392, 54.752418696930889 ], [ 9.866840843623361, 54.752387852669081 ], [ 9.870397324189284, 54.752139945128967 ], [ 9.872387287821359, 54.752082934836935 ], [ 9.873658381358783, 54.752184181635656 ], [ 9.874558998031148, 54.752354827394392 ], [ 9.874931954773951, 54.752480916054026 ], [ 9.875666148714274, 54.752729128553085 ], [ 9.877045214948941, 54.75357799767513 ], [ 9.903014756383822, 54.773470449070295 ], [ 9.901623755848078, 54.787964043344822 ], [ 9.901782069896635, 54.788392165794036 ], [ 9.905509926248449, 54.795609709181768 ], [ 9.909050592859909, 54.7989913324339 ], [ 9.957707218587689, 54.778172048468583 ], [ 9.974147853212823, 54.760742023522994 ], [ 9.976612006073257, 54.757356806407465 ], [ 9.976905806610032, 54.756835647846245 ], [ 9.977208064392231, 54.75562594534653 ], [ 9.978483977190489, 54.749346115493978 ], [ 9.979145825716511, 54.745402679074829 ], [ 9.979487701263581, 54.742091650485946 ], [ 9.979884241567499, 54.739234115008728 ], [ 9.980270505433726, 54.737213355763231 ], [ 9.980965234920246, 54.734601094524656 ], [ 9.981406131947026, 54.733033830550013 ], [ 9.983023922496784, 54.728821367351486 ], [ 9.983454948676931, 54.728056016993094 ], [ 9.986716861574164, 54.722350807480268 ], [ 9.990637900573528, 54.716857334311676 ], [ 9.99622966655954, 54.71259076063744 ], [ 10.000841725182703, 54.709610232643328 ], [ 10.014789270750295, 54.701121320672094 ], [ 10.023209082283572, 54.696585310480259 ], [ 10.033501434813321, 54.663465035906285 ], [ 10.032349425494395, 54.654447024199392 ], [ 10.031169822290225, 54.636575219685618 ], [ 10.024150650923939, 54.641801198596205 ], [ 10.018643004626016, 54.642971762648045 ], [ 10.00788795090962, 54.644350947323566 ], [ 10.005820519660674, 54.644186463827481 ], [ 9.969893364735244, 54.639458753291706 ], [ 9.920450172494212, 54.623732541682429 ], [ 9.854020767033907, 54.597632559291299 ], [ 9.77175738781332, 54.561630962646412 ], [ 9.738160074713482, 54.53398230572909 ], [ 9.729233588613008, 54.52993347993084 ], [ 9.716572854726396, 54.52425402388296 ], [ 9.699810632625088, 54.519409138331994 ], [ 9.674064430523771, 54.50697170004954 ], [ 9.638120821367892, 54.463262369937404 ], [ 9.639864487684974, 54.462385464917404 ], [ 9.641624631619312, 54.460682690219919 ], [ 9.641636684114108, 54.460081258943866 ], [ 9.641331152256356, 54.454566789384302 ], [ 9.639251926412822, 54.453241353516994 ], [ 9.638285166539299, 54.45279533838562 ], [ 9.614024293430163, 54.443568548371246 ], [ 9.592893352230446, 54.436846411353471 ], [ 9.56983881048401, 54.433913222870821 ], [ 9.567461242419645, 54.433473690157797 ], [ 9.564224763088847, 54.43287511313757 ], [ 9.558519392574532, 54.431800155064785 ], [ 9.553029229566508, 54.427269916709839 ], [ 9.551675892486463, 54.424117894243679 ], [ 9.555049981519241, 54.391064568354537 ], [ 9.5605105991351, 54.383106697062466 ], [ 9.562466287847288, 54.380194191795432 ], [ 9.564188581388857, 54.376687313406663 ], [ 9.565474185773475, 54.373446525423326 ], [ 9.565464408212859, 54.371776386690257 ], [ 9.565057144333755, 54.370704878654152 ], [ 9.556189479936712, 54.357861678629234 ], [ 9.55212741702559, 54.355927603315244 ], [ 9.550914289528349, 54.355565527162128 ], [ 9.49737355018004, 54.341308123656198 ], [ 9.490777300271981, 54.339783206765695 ], [ 9.474434435453032, 54.337162508257876 ], [ 9.455555984387367, 54.338392290824373 ], [ 9.442977847362734, 54.343466111551649 ], [ 9.417772853656691, 54.346437350973922 ], [ 9.415825866252872, 54.346324026224032 ], [ 9.408381132843637, 54.341105485688765 ], [ 9.390841938491135, 54.324007666646196 ], [ 9.399028846780153, 54.322886013903116 ], [ 9.400937667571615, 54.319717171139793 ], [ 9.403211136401078, 54.313663778912868 ], [ 9.402713905706351, 54.303879964419096 ], [ 9.393510752108172, 54.288964932929915 ], [ 9.38608655960843, 54.286402896694163 ], [ 9.361787553536173, 54.284164633610189 ], [ 9.340269667428812, 54.281893460976249 ], [ 9.317428965771972, 54.27701981759941 ], [ 9.286030149360426, 54.27708853836873 ], [ 9.262921797956288, 54.303166289569496 ], [ 9.266322929990318, 54.308785323840958 ], [ 9.269319844768225, 54.308168130195938 ], [ 9.271306464784754, 54.307972038703831 ], [ 9.27265747235753, 54.307985234164732 ], [ 9.273789963211511, 54.308122005035145 ], [ 9.274594173854565, 54.308462107069012 ], [ 9.274852612558242, 54.3090932283027 ], [ 9.274828308174257, 54.309946094468721 ], [ 9.272798151850443, 54.327266560069177 ], [ 9.26285745409724, 54.336355544515222 ], [ 9.255063918286552, 54.342277150236939 ], [ 9.233533613977492, 54.345869716312492 ], [ 9.223252314626986, 54.342200855825304 ], [ 9.229064047458907, 54.335372167235221 ], [ 9.227400634749984, 54.32460639290791 ], [ 9.22645761883761, 54.323249851262858 ], [ 9.225102327374186, 54.322329141980113 ], [ 9.224353283150879, 54.32220480704661 ], [ 9.197300834900624, 54.319551638422681 ], [ 9.196791240499332, 54.327867019434706 ], [ 9.197267340448679, 54.328886690500184 ], [ 9.197296001547445, 54.329461706783434 ], [ 9.196817080767712, 54.3305612841136 ], [ 9.195736622789974, 54.331735442725723 ], [ 9.194670831634825, 54.332424825967621 ], [ 9.193674366577266, 54.332854500808544 ], [ 9.191215294210314, 54.333376719503157 ], [ 9.181988319141141, 54.334618406686317 ], [ 9.179596796083079, 54.33493456866244 ], [ 9.17759591332295, 54.335039272890285 ], [ 9.175954979910733, 54.33493221510372 ], [ 9.171351593224388, 54.344159959288945 ], [ 9.17270895635308, 54.348978509038702 ], [ 9.220656585218267, 54.379817001456118 ], [ 9.258276289212365, 54.3816122385551 ], [ 9.264787063891726, 54.397515588139463 ], [ 9.277857334121618, 54.414433966676114 ], [ 9.280603344872835, 54.417418271728131 ], [ 9.283195114428821, 54.419391359069245 ], [ 9.292492293689506, 54.425744495690061 ], [ 9.30386759545962, 54.431419722712455 ], [ 9.318637524495383, 54.438661035987266 ], [ 9.319213796356694, 54.438989660830394 ], [ 9.322253689868008, 54.441594928383203 ], [ 9.326703251009278, 54.449555424687595 ], [ 9.327241685213494, 54.454651196151254 ], [ 9.32663027347842, 54.456478897579082 ], [ 9.326181483228757, 54.457352810386432 ], [ 9.314590175920296, 54.477623604841099 ], [ 9.286404906845112, 54.497172092592898 ], [ 9.282787743177254, 54.511819071502991 ], [ 9.290279671365827, 54.519429530687006 ], [ 9.301261549468702, 54.532309397187056 ], [ 9.304961380096229, 54.560659265862483 ], [ 9.262508347010874, 54.574650702732214 ], [ 9.255461228569915, 54.589752585001065 ], [ 9.241011774566614, 54.615086681521987 ], [ 9.213352664857577, 54.641739491026463 ], [ 9.193191269332489, 54.65837262215517 ], [ 9.168467249516366, 54.691991926241478 ], [ 9.145278767039528, 54.696259879491556 ], [ 9.143573936313237, 54.692715700966012 ], [ 9.128696949767274, 54.691783884968999 ], [ 9.099440138711223, 54.693232722914715 ], [ 9.075385235137942, 54.696618343195411 ], [ 9.068190288368324, 54.698583973488248 ], [ 9.062382086128849, 54.700771364269414 ], [ 9.064174510445136, 54.701393057710213 ], [ 9.066052010672404, 54.701791280022888 ], [ 9.078862939895748, 54.72382793634825 ], [ 9.075528223256342, 54.737281298666247 ], [ 9.078848707013826, 54.751185924676115 ], [ 9.082044748297822, 54.75678647409476 ], [ 9.094610968528402, 54.762435528511752 ], [ 9.111275753835686, 54.767942474285668 ], [ 9.119217342198146, 54.787253856014665 ], [ 9.119184977487549, 54.78824973945509 ], [ 9.106170213159231, 54.803363956532515 ], [ 9.094108914413548, 54.814890620599364 ], [ 9.10650910899966, 54.83331784587682 ], [ 9.109378284636678, 54.843811594799071 ], [ 9.112076784465039, 54.854181402988253 ], [ 9.113357065668161, 54.873543720689931 ], [ 9.135976656906854, 54.873859149549666 ], [ 9.143330467871728, 54.873022636189276 ], [ 9.155061067549045, 54.870661123563529 ], [ 9.205086568933186, 54.859010343518641 ], [ 9.240138464252086, 54.849983793502808 ], [ 9.244829836696386, 54.843864875405238 ], [ 9.239810782181369, 54.839889288775971 ], [ 9.238814133895614, 54.839076066156373 ], [ 9.23531989091455, 54.835281211238872 ], [ 9.235755295449165, 54.831103510634371 ], [ 9.238866586336941, 54.826020069080734 ], [ 9.25008113925918, 54.809715278543123 ], [ 9.327226918479472, 54.805782710663664 ], [ 9.346531065010744, 54.806632193728447 ], [ 9.370822445579547, 54.819213697627291 ], [ 9.372483039050504, 54.820166311364765 ], [ 9.373848407146427, 54.821127925107611 ], [ 9.374710521092693, 54.825609175816183 ], [ 9.375182515309575, 54.830607402127931 ], [ 9.377507975766164, 54.833350639541621 ], [ 9.380911886600002, 54.837352478763677 ], [ 9.407184023913524, 54.84231878562872 ], [ 9.418562820153895, 54.83237618711825 ], [ 9.428720323507093, 54.827110040911386 ], [ 9.435200657502957, 54.82708983296682 ], [ 9.437432853285998, 54.8279873631896 ], [ 9.449432701521435, 54.832810361410559 ], [ 9.482919526732553, 54.837075243168762 ], [ 9.497587474379959, 54.841078265582922 ], [ 9.58441275774523, 54.886137055125708 ], [ 9.591910924522319, 54.886970215613481 ], [ 9.62801684479153, 54.87974825658933 ], [ 9.604633057040191, 54.854593804802214 ], [ 9.625895687019835, 54.849690426963782 ], [ 9.650265923320294, 54.844064606201513 ], [ 9.6769063091456, 54.837907635546181 ], [ 9.708774270300667, 54.830532764762452 ] ] ] ] } },
+{ "type": "Feature", "properties": { "WKR_NR": 299, "name": "Homburg" }, "geometry": { "type": "MultiPolygon", "coordinates": [ [ [ [ 7.292601445839059, 49.408222482601417 ], [ 7.296756685487287, 49.38928377886262 ], [ 7.313068052010542, 49.385140707954328 ], [ 7.336956166554892, 49.380538227486035 ], [ 7.366514163991976, 49.364420037221308 ], [ 7.366870347679701, 49.363187450285608 ], [ 7.368916254102309, 49.363523517066952 ], [ 7.369925164928656, 49.363695646757307 ], [ 7.371755915588047, 49.364160730328969 ], [ 7.379023643718725, 49.366028225898368 ], [ 7.38808512835344, 49.369206543384713 ], [ 7.395898693288553, 49.372046056569516 ], [ 7.402075305281932, 49.367718653369828 ], [ 7.395381934845025, 49.364652725244305 ], [ 7.3933519277823, 49.363479166134937 ], [ 7.393834939073805, 49.362117082439291 ], [ 7.398667935340812, 49.350493834485682 ], [ 7.392801075758522, 49.328261782134113 ], [ 7.392082972679433, 49.320849147665221 ], [ 7.394494087736994, 49.316352061076458 ], [ 7.387486082887892, 49.31050701661151 ], [ 7.385427185003392, 49.294123964513069 ], [ 7.374717415085761, 49.28290548148086 ], [ 7.371695484354567, 49.280912649438314 ], [ 7.365326614191658, 49.278124109255529 ], [ 7.36178483235191, 49.278835511287291 ], [ 7.336389568316225, 49.262393957751975 ], [ 7.303463868383233, 49.245497980872578 ], [ 7.289132351733424, 49.237821135122644 ], [ 7.291312635674774, 49.237281744282136 ], [ 7.294503601989986, 49.234708038634828 ], [ 7.302878476226607, 49.223255887957912 ], [ 7.301127109745697, 49.215791091154344 ], [ 7.311464129100777, 49.197098355302003 ], [ 7.320340967355093, 49.189499140905639 ], [ 7.336210759790482, 49.181437976476325 ], [ 7.338169003385868, 49.17402054007939 ], [ 7.347549555804476, 49.165251975980205 ], [ 7.36117419968233, 49.161299784223289 ], [ 7.368755429967073, 49.161457879671907 ], [ 7.36144463072127, 49.152088336984946 ], [ 7.307740641856341, 49.128405089337797 ], [ 7.273560498281795, 49.124215470324849 ], [ 7.24878949653378, 49.127384138489177 ], [ 7.233325193426347, 49.127627304055885 ], [ 7.160330508349073, 49.122961724284018 ], [ 7.154425975283132, 49.12265123034549 ], [ 7.14221940740964, 49.126245196248568 ], [ 7.134850565039983, 49.12946880618307 ], [ 7.132396300003514, 49.131238946457685 ], [ 7.119146684604889, 49.140860803719377 ], [ 7.111185586680917, 49.149914907625714 ], [ 7.101068796402856, 49.155997798617925 ], [ 7.114982192035707, 49.167242250546479 ], [ 7.112044572212026, 49.176211860938537 ], [ 7.116833416689079, 49.195634929575114 ], [ 7.128184194156193, 49.207970710929573 ], [ 7.1306435674077, 49.217994509139089 ], [ 7.129464656083052, 49.240326227961539 ], [ 7.12879037760568, 49.245042360622662 ], [ 7.112897270842112, 49.255215882954751 ], [ 7.111814615998708, 49.255672917782405 ], [ 7.108247760106346, 49.256289482576832 ], [ 7.104297866212537, 49.254937016665764 ], [ 7.102858361170671, 49.254282646243368 ], [ 7.094711457702179, 49.250244787580264 ], [ 7.079420854305797, 49.249779841511639 ], [ 7.068398152868705, 49.256206066908973 ], [ 7.062693910290117, 49.261524574438134 ], [ 7.062106244749302, 49.267242761366845 ], [ 7.062578385728021, 49.271417531467037 ], [ 7.062178961844507, 49.272278789829606 ], [ 7.060918731901238, 49.274995741085611 ], [ 7.054169762920833, 49.28697274928723 ], [ 7.050365185076299, 49.289728610693579 ], [ 7.047563998770412, 49.291146433586285 ], [ 7.044495832614897, 49.292595517479405 ], [ 7.04331706265169, 49.293136888389398 ], [ 7.040278868541436, 49.294334240323636 ], [ 7.038967281908739, 49.29484184684916 ], [ 7.031084963628987, 49.296870387502956 ], [ 7.020533055444266, 49.290087249182001 ], [ 7.012249975766038, 49.291579842924477 ], [ 7.006828856874336, 49.309482883793464 ], [ 6.993554851234004, 49.320569579070543 ], [ 7.020373615539691, 49.349716267365444 ], [ 7.027256515223508, 49.348893377404977 ], [ 7.053138870350396, 49.345114888935647 ], [ 7.073654936842718, 49.340960074717685 ], [ 7.103076250069003, 49.339043121402526 ], [ 7.114241075218537, 49.336273140542922 ], [ 7.136766553949864, 49.350699562177638 ], [ 7.139177063415566, 49.353085865940322 ], [ 7.141166821418174, 49.356426525010328 ], [ 7.142101051313549, 49.358287470906298 ], [ 7.148238527395089, 49.371246587907621 ], [ 7.149062958714413, 49.381484979544773 ], [ 7.153775408253071, 49.390053769323799 ], [ 7.167403854210448, 49.392445696591935 ], [ 7.184625040857933, 49.388994557574691 ], [ 7.210420048969598, 49.39170126661682 ], [ 7.235313241919044, 49.396373964661805 ], [ 7.235964979329175, 49.396527928721042 ], [ 7.236845608169766, 49.396967662235255 ], [ 7.23765347737908, 49.39807161068002 ], [ 7.239865374725136, 49.402027212833787 ], [ 7.239602476972899, 49.404917440233625 ], [ 7.240923984548234, 49.405369902502201 ], [ 7.242959206988623, 49.405879011402405 ], [ 7.247384695702333, 49.40654719562 ], [ 7.25951315095655, 49.403088014398612 ], [ 7.262686770775075, 49.40083817144049 ], [ 7.261671128132677, 49.397081167164217 ], [ 7.292601445839059, 49.408222482601417 ] ] ] ] } }
+]
+}
+;
+  function winners() {
+    var r = window.latestConstituencyResults || [], lu = {};
+    r.forEach(function(row) {
+      var b=null,bv=-1;
+      PARTIES.forEach(function(p){ if((row[p]||0)>bv){bv=row[p];b=p;} });
+      lu[row.name]=b;
+    });
+    return lu;
+  }
+  function sty(lu){ return function(f){ var w=lu[f.properties.name]; return {fillColor:w?(PARTY_COLORS[w]||'#ccc'):'#ccc',fillOpacity:0.99,color:'#fff',weight:0.6}; }; }
+  function initMap() {
+    var defaultZoom = window.innerWidth < 768 ? 5.5 : 6;
+    map = L.map('constituency-map',{
+    center:[51.3, 10.3],
+    zoom:defaultZoom,
+    zoomSnap: 0,
+    minZoom:4,
+    maxZoom:12,
+    maxBounds:[
+        [45.8, 5.0],
+        [57.8, 16.0]
+    ],
+    maxBoundsViscosity: 1.0
+});
+    L.tileLayer('https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png',{subdomains:'abcd'}).addTo(map);
+
+    layer = L.geoJSON(GJ,{style:sty(winners()),onEachFeature:function(f,l){
+      l.on({
+        mouseover:function(e){e.target.setStyle({weight:2.5,color:'#222',fillOpacity:0.97});e.target.bringToFront();var w=winners()[f.properties.name]||'?';l.bindTooltip('<strong>'+f.properties.name+'</strong><br>'+((window.PARTY_ALIASES&&window.PARTY_ALIASES[w])||w),{sticky:true,className:'map-tooltip-clean'}).openTooltip();},
+
+mouseout: function(e) {
+    e.target.setStyle(sty(winners())(f));
+    e.target.closeTooltip();
+},
+        click:function(){var el=document.getElementById('constituency-search');if(el){el.value=f.properties.name;showConstituencyResults(f.properties.name);document.getElementById('constituency-section').scrollIntoView({behavior:'smooth'});}}
+      });
+    }}).addTo(map);
+    window.updateMapColors=function(){if(layer)layer.setStyle(sty(winners()));};
+  }
+
+// After initMap(), add:
+window.addEventListener('resize', function() {
+  map.invalidateSize();
+});
+
+})();
+
+</script>
+</body>
+</html>
