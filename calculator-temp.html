@@ -2281,18 +2281,18 @@ helpBtn.addEventListener("click", () => {
     });
     return lu;
   }
-  function sty(lu){ return function(f){ var w=lu[f.properties.name]; return {fillColor:w?(PARTY_COLORS[w]||'#ccc'):'#ccc',fillOpacity:0.99,smoothFactor: 0.6,color:'#fff',weight:0.6}; }; }
+  function sty(lu){ return function(f){ var w=lu[f.properties.name]; return {fillColor:w?(PARTY_COLORS[w]||'#ccc'):'#ccc',fillOpacity:0.99,smoothFactor: 0.8,color:'#fff',weight:0.6}; }; }
   function initMap() {
     var defaultZoom = window.innerWidth < 768 ? 5.9 : 6.3;
     map = L.map('constituency-map',{
-    center:[47.8, 13.8],
+    center:[47.8, 13.7],
     zoom:defaultZoom,
     zoomSnap: 0,
     minZoom:4,
     maxZoom:12,
     maxBounds:[
-        [42.8, 8.8],
-        [52.8, 17.8]
+        [42.8, 8.7],
+        [52.8, 17.7]
     ],
     maxBoundsViscosity: 1.0
 });
