@@ -2230,7 +2230,6 @@ perConst.forEach(row => {
 // But the TABLE and coalition builder use PR seats
 
 const prSeats = calculatePR();
-prSeats["OTH"] = 1;
 
 PARTIES.forEach((n, i) => {
   const seats = prSeats[n] || 0;
